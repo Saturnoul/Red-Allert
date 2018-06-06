@@ -4,6 +4,8 @@
 #include<cmath>
 #include "cocos2d.h"
 using namespace cocos2d;
+
+//judge if a tile is already being selected
 bool isInChosedPs(vector<Vec2>& chosedPs, Vec2& possibleP)
 {
 	for (int i = 0; i < chosedPs.size(); i++)
@@ -15,6 +17,8 @@ bool isInChosedPs(vector<Vec2>& chosedPs, Vec2& possibleP)
 	}
 	return false;
 }
+
+//find the tile that has the least costs
 int findShortest(vector<int>& possibleCosts)
 {
 	int shortest = 0;
@@ -34,6 +38,8 @@ int findShortest(vector<int>& possibleCosts)
 	}
 	return -1;
 }
+
+//calculate the length of two positions, all by intergers
 int getLength(Vec2& point1, Vec2& point2)
 {
 	int delta_x = point1.x - point2.x;
@@ -43,6 +49,8 @@ int getLength(Vec2& point1, Vec2& point2)
 	int Length = length * 10;
 	return Length;
 }
+
+//judge if a tile is already dismissed
 bool isAbandoned(Vec2& P, vector<Vec2>& abandonedPs)
 {
 	for (auto i : abandonedPs)
@@ -52,6 +60,8 @@ bool isAbandoned(Vec2& P, vector<Vec2>& abandonedPs)
 	}
 	return false;
 }
+
+//judge if two tiles can be walked through
 bool isWalkable(Vec2&P1, Vec2& P2, vector<vector<bool> >& positionCondition)
 {
 	int delta_x = -1;
@@ -74,6 +84,8 @@ bool isWalkable(Vec2&P1, Vec2& P2, vector<vector<bool> >& positionCondition)
 	}
 	return true;
 }
+
+//search the path in made of tiles
 vector<Vec2> searchPathForTile(vector<vector<bool> >& positionCondition, Vec2& startPosition, Vec2& endPosition)
 {
 	int index = -1;
@@ -119,7 +131,6 @@ vector<Vec2> searchPathForTile(vector<vector<bool> >& positionCondition, Vec2& s
 				}
 			}
 		}
-		log("still searching");
 		index = findShortest(possibleCosts);
 		if (index >= 0)
 		{
@@ -147,6 +158,8 @@ vector<Vec2> searchPathForTile(vector<vector<bool> >& positionCondition, Vec2& s
 	} while (chosedPs[chosedPs.size() - 1].x != endPosition.x || chosedPs[chosedPs.size() - 1].y != endPosition.y);
 	return chosedPs;
 }
+
+//transfer the tile coordinate to openGl coordinate
 vector<Vec2> transferToOpenGLCoord(vector<Vec2>& chosedPs, float width, float height,int TileHeight, Vec2 MapPosition)
 {
 	for (int i = 0; i < chosedPs.size(); i++)
@@ -155,5 +168,13 @@ vector<Vec2> transferToOpenGLCoord(vector<Vec2>& chosedPs, float width, float he
 		chosedPs[i].y = (TileHeight - (chosedPs[i].y + 0.5)) * height + MapPosition.y;
 	}
 	return chosedPs;
+}
+
+//transter the openGl coordinate to tile coordinate 
+Vec2 tileCoordFromPosition(Vec2 pos, TMXTiledMap* _tileMap)
+{
+	int x = (pos.x - _tileMap->getPosition().x) / _tileMap->getTileSize().width;
+	int y = ((_tileMap->getMapSize().height * _tileMap->getTileSize().height) - pos.y + _tileMap->getPosition().y) / _tileMap->getTileSize().height;
+	return Vec2(x, y);
 }
 #endif
