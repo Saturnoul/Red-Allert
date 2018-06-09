@@ -130,7 +130,7 @@ void singleSelect(Vec2 position, vector<Sprite*> _Sprites)
 void Move(Vec2 position, TMXTiledMap* _tileMap, vector<Sprite*> _Sprites)
 {
 	Vec2 cusorTilePosition = tileCoordFromPosition(position, _tileMap);
-	if (!isMoved && !isSelecting && positionCondition[cusorTilePosition.x][cusorTilePosition.y])
+	if (!isMoved && !isSelecting && positionCondition[cusorTilePosition.x][cusorTilePosition.y] && isOperating)
 	{
 		log("Moved");
 		Vec2 contentSize = _Sprites[0]->getContentSize();
