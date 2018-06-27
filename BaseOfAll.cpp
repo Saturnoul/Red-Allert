@@ -26,3 +26,36 @@ bool Basement::minusBloodAmount(float attack)
 		return true;
 	}
 }
+
+void Basement::setpos(Vec2 position)
+{
+	this->pos = position;
+}
+void Basement::setgamemap(MyMap* Gamemap)
+{
+	this->gamemap = Gamemap;
+}
+void Basement::setgridmap(GridMap* Gridmap)
+{
+	this->gridmap = Gridmap;
+}
+void Basement::setgmap()
+{
+	for (int i = pos.x; i < pos.x + 2; i++)
+	{
+		for (int j = pos.y; j < pos.y + 2; j++)
+		{
+			gridmap->gmap[i][j] = 0;
+		}
+	}
+}
+void Basement::resetgmap()
+{
+	for (int i = pos.x; i < pos.x + 2; i++)
+	{
+		for (int j = pos.y; j < pos.y + 2; j++)
+		{
+			gridmap->gmap[i][j] = 1;
+		}
+	}
+}
