@@ -1,6 +1,15 @@
 #include "BaseOfAll.h"
 
-
+float time(Vec2 P1, Vec2 P2, int label)
+{
+	auto distance = sqrtf((P1.x - P2.x) * (P1.x - P2.x) + (P1.y - P2.y)* (P1.y - P2.y));          //计算移动时间
+	if (label == TypeSodier)
+		return distance / 50;
+	if (label == TypeTank)
+		return distance / 80;
+	if (label == TypePatrolDog)
+		return distance / 60;
+}
  Basement::Basement()
  {
 	SetVisible(false);
@@ -27,6 +36,51 @@ bool Basement::minusBloodAmount(float attack)
 		return true;
 	}
 }
+void Basement::setPath(GridPath _path)
+{
+	path.clear();
+	for (auto i : _path)
+	{
+		path.push_back(i);
+	}
+}
+void Basement::generateGLPath()
+{
+	Vec2 contentSize = this->getContentSize();
+	float area = path[path.size()- 1].x * contentSize.x * contentSize.y * 1.0;
+	float equalEdge = sqrt(area) / 5;
+	srand((unsigned)time(NULL));
+	Vec2 position = tilemap->getPositionAtMap(Vec2(path[path.size() - 2].x, path[path.size() - 2].y));
+	Vec2 Position;
+	Vec2 TilePosition;
+	do
+	{
+		Position.x = ((float)random() / RAND_MAX - 0.5) * equalEdge + position.x;
+		Position.y = ((float)random() / RAND_MAX - 0.5) * equalEdge + position.y;
+		TilePosition = tilemap->staggeredCoordForPosition(position);
+	} while (TilePosition.x < tilemap->getMapSize().height && TilePosition.y < tilemap->getMapSize().width && TilePosition.x >= 0 && TilePosition.y >= 0 && !gridmap->gmap[int(TilePosition.x)][int(TilePosition.y)]);
+	tilemap->getPositionAtGL(path, GLpath);
+	GLpath.push_back(Position);
+}
+void Basement::move()
+{
+	if (path.size() > 2)
+	{
+		auto label = this->getTag();
+		GLpath.clear();
+		generateGLPath();
+		cocos2d::Vector<FiniteTimeAction*> pathAction;
+		for (int j = 1; j < GLpath.size(); j++)
+		{
+			pathAction.pushBack(static_cast<FiniteTimeAction*>(MoveTo::create(time(GLpath[j - 1], GLpath[j], label), GLpath[j])));
+		}
+		auto sequence = Sequence::create(pathAction);
+		this->stopAllActions();
+		this->runAction(sequence);
+	}
+}
+
+MyMap* Basement::tilemap = nullptr;
 
 void Basement::setpos(Vec2 position)
 {
@@ -60,5 +114,3 @@ void Basement::resetgmap()
 		}
 	}
 }
-
-
