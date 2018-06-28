@@ -15,7 +15,7 @@ Base* Base::create()
 		base->setPhysicsBody(body);
 		base->addChild(base->BloodBackground);
 		base->addChild(base->BloodProgress);
-		base->BloodBackground->setPosition(Vec2(base->getContentSize().width/2, base->getContentSize().height + 25));
+		base->BloodBackground->setPosition(Vec2(base->getContentSize().width / 2, base->getContentSize().height + 25));
 		base->BloodProgress->setPosition(Vec2(base->getContentSize().width / 2, base->getContentSize().height + 25));
 		base->setTag(TypeBase);
 		base->setBuildTime(BaseBT);
@@ -87,7 +87,7 @@ Sodier* Sodier::create()
 		sodier->runAction(RepeatForever::create(action));
 		sodier->autorelease();
 		return sodier;
-	} 
+	}
 	CC_SAFE_DELETE(sodier);
 	return nullptr;
 }
@@ -106,7 +106,7 @@ void Sodier::updateSodier(float dt)
 		bullet->shootBulletFromBasement((Basement*)this, direction, "sound/rocketfire.wav");
 	}
 }
-void Sodier::handleBulletCollidingWithEnemy( float attack)
+void Sodier::handleBulletCollidingWithEnemy(float attack)
 {
 	this->SetVisible(true);
 	if (!this->minusBloodAmount(attack * attackRate))
@@ -160,7 +160,7 @@ PowerPlant* PowerPlant::create()
 	CC_SAFE_DELETE(powerplant);
 	return nullptr;
 }
-void PowerPlant::handleBulletCollidingWithEnemy( float attack)
+void PowerPlant::handleBulletCollidingWithEnemy(float attack)
 {
 	this->SetVisible(true);
 	if (!this->minusBloodAmount(attack * attackRate))
@@ -212,7 +212,7 @@ MineField* MineField::create()
 
 	return nullptr;
 }
-void MineField::handleBulletCollidingWithEnemy( float attack)
+void MineField::handleBulletCollidingWithEnemy(float attack)
 {
 	this->SetVisible(true);
 	if (!this->minusBloodAmount(attack * attackRate))
@@ -263,7 +263,7 @@ Barrack* Barrack::create()
 	CC_SAFE_DELETE(barrack);
 	return nullptr;
 }
-void Barrack::handleBulletCollidingWithEnemy( float attack)
+void Barrack::handleBulletCollidingWithEnemy(float attack)
 {
 	this->SetVisible(true);
 	if (!this->minusBloodAmount(attack * attackRate))
@@ -314,7 +314,7 @@ WarMachine_Factory* WarMachine_Factory::create()
 	CC_SAFE_DELETE(warmachine_factory);
 	return nullptr;
 }
-void WarMachine_Factory::handleBulletCollidingWithEnemy( float attack)
+void WarMachine_Factory::handleBulletCollidingWithEnemy(float attack)
 {
 	this->SetVisible(true);
 	if (!this->minusBloodAmount(attack * attackRate))
@@ -354,7 +354,7 @@ PatrolDog* PatrolDog::create()
 	CC_SAFE_DELETE(patroldog);
 	return nullptr;
 }
-void PatrolDog::handleBulletCollidingWithEnemy( float attack)
+void PatrolDog::handleBulletCollidingWithEnemy(float attack)
 {
 	this->SetVisible(true);
 	if (!this->minusBloodAmount(attack * attackRate))

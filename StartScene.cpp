@@ -1,10 +1,9 @@
-#include "StartScene.h"
+﻿#include "StartScene.h"
 #include "SimpleAudioEngine.h"
-#include "SettingScene.h"
 #include "HelpScene.h"
 #include "StartmenuScene.h"
-//#include "SocketServer.h"
-//#include "SocketClient.h"
+#include "SocketServer.h"
+#include "SocketClient.h"
 #include "ui/UIEditBox/UIEditBox.h"
 USING_NS_CC;
 

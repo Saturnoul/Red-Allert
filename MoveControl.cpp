@@ -1,7 +1,7 @@
 #include"MoveControl.h"
 
 
-float time(Vec2 P1, Vec2 P2, int label)
+/*float time(Vec2 P1, Vec2 P2, int label)
 {
 	auto distance = sqrtf((P1.x - P2.x) * (P1.x - P2.x) + (P1.y - P2.y)* (P1.y - P2.y));          //计算移动时间
 	if (label == TypeSodier)
@@ -10,7 +10,7 @@ float time(Vec2 P1, Vec2 P2, int label)
 		return distance / 80;
 	if (label == TypePatrolDog)
 		return distance / 60;
-}
+}*/
 
 // judge if the player wants to cancel previous selection 
 void isCancelSelection(Vec2 position, EventMouse::MouseButton button)
@@ -86,8 +86,41 @@ void singleSelect(int Id,Vec2 position, MyMap* gamemap)
 	startPoint = position;
 }
 
+
+void FindPath(GameMessageSet* msgs,Vec2 position, MyMap* _tileMap, GridMap* gridmap)
+{
+	vector<GridPoint> path;
+	Vec2 cusorTilePosition = _tileMap->staggeredCoordForPosition(position);
+	if (!selectedSprites.empty() && !allSprites.empty() && !isMoved && !isSelecting &&gridmap->gmap[int(cusorTilePosition.x)][int(cusorTilePosition.y)] && isOperating)
+	{
+		log("Moved");
+		for (int i = 0; i < selectedSprites.size() && isMovable(selectedSprites.at(i)); i++)
+		{
+			auto temp = selectedSprites.at(i);
+			Vec2 startTileCoord = _tileMap->staggeredCoordForPosition(_tileMap->convertToWorldSpace(selectedSprites.at(i)->getPosition()));
+			Vec2 endTileCoord = _tileMap->staggeredCoordForPosition(position);
+			auto start = GridPoint(startTileCoord.x, startTileCoord.y);
+			auto end = GridPoint(endTileCoord.x, endTileCoord.y);
+			if (startTileCoord != endTileCoord)
+			{
+				path = searchPathForTile(gridmap, start, end);
+			}
+			else
+			{
+				path.push_back(start);
+			}
+			path.push_back(GridPoint(selectedSprites.size(), 0));
+			
+			msgs->add_game_message()->genGameMessage(GameMessage::CmdCode::GameMessage_CmdCode_UDP, temp->id,temp->camp,0, path);
+
+			path.clear();
+		}
+	}
+	
+}
+
 //move the sprites being selected with the path generated
-void setMove(Vec2 position, MyMap* _tileMap, GridMap* gridmap)
+/*void setMove(Vec2 position, MyMap* _tileMap, GridMap* gridmap)
 {
 	//Vec2 cusorTilePosition = tileCoordFromPosition(position, _tileMap);
 	Vec2 cusorTilePosition = _tileMap->staggeredCoordForPosition(position);
@@ -134,7 +167,7 @@ void setMove(Vec2 position, MyMap* _tileMap, GridMap* gridmap)
 		}
 		positionList.clear();
 	}
-}
+}*/
 
 //set the flags to default value
 void setDefault(Layer* layer)

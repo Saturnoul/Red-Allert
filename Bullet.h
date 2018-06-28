@@ -4,7 +4,7 @@
 #include "BaseOfAll.h"
 #include "pathFinding.h"
 #include<math.h>
-#include"HelloWorldScene.h"
+#include"Battlescene.h"
 USING_NS_CC;
 
 

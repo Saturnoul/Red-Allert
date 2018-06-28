@@ -22,12 +22,10 @@ class GridPathDefaultTypeInternal : public ::google::protobuf::internal::Explici
 class GameMessageSetDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<GameMessageSet> {
 } _GameMessageSet_default_instance_;
 
-void GameMessage::genGameMessage(CmdCode _cmd_code, int _unit_0, int _unit_1, int _damage, int _camp, int _unit_type, const GridPath& _grid_path)
+void GameMessage::genGameMessage(CmdCode _cmd_code, int _unit_0, int _camp, int _unit_type, const GridPath& _grid_path)
 {
 	set_cmd_code(_cmd_code);
 	set_unit_0(_unit_0);
-	set_unit_1(_unit_1);
-	set_damage(_damage);
 	set_camp(_camp);
 	set_unit_type(_unit_type);
 	MsgGridPath* msg_grid_path = mutable_grid_path();

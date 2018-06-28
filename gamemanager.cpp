@@ -189,6 +189,7 @@ void Manager::additem(int id,int camp, int Type, Vec2 Pos, float Resttime)
 	resttime.push_back(Resttime);
 }
 
+
 float Manager::gettime(int type)
 {
 	switch (type)
@@ -227,6 +228,15 @@ void Manager::setSocketClient(SocketClient* _socket_client)
 
 void Manager::updatestates()
 {
+	msgs->add_game_message()->genGameMessage(GameMessage::CmdCode::GameMessage_CmdCode_EMP,0,0,0,{});
+	
+	auto sent_msg = msgs->SerializeAsString();
+	socket_client->send_string(sent_msg);
+	
+	auto rec = socket_client->get_string();
+	msgs->ParseFromString(rec);
+
+	int sent_msg_num = msgs->game_message_size();
 	for (int i = 0; i < msgs->game_message_size(); i++)
 	{
 		const GameMessage&  msg = msgs->game_message(i);
@@ -242,6 +252,8 @@ void Manager::updatestates()
 		else if (msg.cmd_code() == GameMessage::CmdCode::GameMessage_CmdCode_UDP)
 		{
 			auto temp = id_unit.at(msg.unit_0());
+			temp->setPath(msg.grid_path());
+			temp->move();
 		}
 	}
 	

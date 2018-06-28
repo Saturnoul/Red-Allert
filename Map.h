@@ -5,6 +5,8 @@
 #include<vector>
 USING_NS_CC;
 using namespace std;
+class GridPoint;
+
 class MyMap : public cocos2d::Node
 {
 
@@ -18,10 +20,10 @@ public:
 	Size getMapSize()const;
 	bool setcolor(Vec2 pos, int color);
 	Point getPositionAtMap(Vec2 pos);
-	Point getPositionAtGL(Vec2 pos);
+	Point getPositionAtGL(GridPoint pos);
 	Size tileSize;
 	Vec2 staggeredCoordForPosition(Point position);
-	void MyMap::getPositionAtGL(vector<Vec2>&  path);
+	void getPositionAtGL(std::vector<GridPoint> path, std::vector<Vec2>& GL);
 	
 
 private:

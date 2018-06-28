@@ -5,19 +5,19 @@
 #include "cocos2d.h"
 #include<vector>
 #include<math.h>
-#include<gedian.h>
+#include "gedian.h"
 using namespace std;
 USING_NS_CC;
-bool isInChosedPositions(vector<Vec2>& chosedPs, Vec2& possibleP);
+bool isInChosedPositions(vector<GridPoint>& chosedPs, GridPoint& possibleP);
 int FindShortest(vector<int>& possibleCosts);
-int getLength(Vec2& point1, Vec2& point2);
-bool isAbandoned(Vec2& P, vector<Vec2>& abandonedPs);
-Vec2 isThrough(int delta_x, int delta_y, int order);
-bool isWalkable(Vec2& P1, Vec2& P2, const GridMap* gamemap);
+int getLength(GridPoint& point1, GridPoint& point2);
+bool isAbandoned(GridPoint& P, vector<GridPoint>& abandonedPs);
+GridPoint isThrough(int delta_x, int delta_y, int order);
+bool isWalkable(GridPoint& P1, GridPoint& P2, const GridMap* gamemap);
 
 
 //生成最优的路径
-vector<Vec2> searchPathForTile(const GridMap* gamemap, Vec2& startPosition, Vec2& endPosition);
+vector<GridPoint> searchPathForTile(const GridMap* gamemap, GridPoint& startPosition, GridPoint& endPosition);
 
 
 //将瓦片坐标转化为OpenGL坐标

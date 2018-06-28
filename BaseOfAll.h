@@ -4,6 +4,7 @@
 #include<string>
 #include"gedian.h"
 #include"Map.h"
+#include"GameMessage.pb.h"
 using namespace std;
 USING_NS_CC;
 
@@ -40,8 +41,9 @@ public:
 	void setgridmap(GridMap* Gridmap);
 	void setgmap();
 	void resetgmap();
-	void setPath(GridPath _path);
+	void setPath(const MsgGridPath& _msg_grid_path);
 	void generateGLPath();
+	GridPath getpath();
 	void move();
 
 protected:
@@ -52,3 +54,23 @@ protected:
 	vector<Vec2> GLpath;
 };
 #endif //_BASE_OF_ALL_
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,4 +1,5 @@
 #include"Map.h"
+#include "gedian.h"
 #include"cocos2d.h"
 #include<vector>
 
@@ -219,15 +220,16 @@ Point MyMap::getPositionAtMap(Vec2 pos)
 	return position+Point(32,32);
 }
 
-Point MyMap::getPositionAtGL(Vec2 pos)
+Point MyMap::getPositionAtGL(GridPoint pos)
 {
-	return this->convertToWorldSpace(pos);
+	Vec2 GL = Vec2(pos.x, pos.y);
+	return this->convertToWorldSpace(GL);
 }
-void MyMap::getPositionAtGL(vector<Vec2>&  path)
+void MyMap::getPositionAtGL(std::vector<GridPoint> path, std::vector<Vec2>& GL)
 {
-	for (int i = 0; i < path.size(); i++)
+	for (int i = 0; i < path.size() - 2; i++)
 	{
-		path[i] = this->getPositionAtMap(path[i]);
+		GL.push_back(this->getPositionAtMap(Vec2(path[i].x, path[i].y)));
 	}
 }
 

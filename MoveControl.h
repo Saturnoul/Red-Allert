@@ -7,6 +7,7 @@
 #include<vector>
 #include "BuildingAndSodier.h"
 #include "SimpleAudioEngine.h"
+#include"GameMessage.pb.h"
 using namespace cocos2d;
 using namespace std;
 using namespace CocosDenshion;
@@ -31,9 +32,9 @@ static bool isOperating = false;            //judge if there are some sprites al
 //generate a matrix to store if every tile is walkable
 //void generatePositionCondition(TMXTiledMap* _tileMap);
 
-float time(Vec2 P1, Vec2 P2, int label);
+//float time(Vec2 P1, Vec2 P2, int label);
 
-
+void FindPath(GameMessageSet* msgs,Vec2 position, MyMap* _tileMap, GridMap* gridmap);
 
 // judge if the player wants to cancel previous selection 
 void isCancelSelection(Vec2 position, EventMouse::MouseButton button);
@@ -53,7 +54,7 @@ void selectInRec(int Id,Vec2 position, MyMap* gamemap);
 void singleSelect(int Id,Vec2 position, MyMap* gamemap);
 
 //move the sprites being selected with the path generated
-void setMove(Vec2 position, MyMap* _tileMap, GridMap* gmap);
+//void setMove(Vec2 position, MyMap* _tileMap, GridMap* gmap);
 
 //set the flags to default value
 void setDefault(Layer* layer);

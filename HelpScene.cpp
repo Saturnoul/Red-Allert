@@ -1,4 +1,4 @@
-//
+﻿//
 //  HelpScene.cpp
 //  MyGame
 //
@@ -7,7 +7,6 @@
 
 #include "HelpScene.h"
 #include "StartScene.h"
-
 USING_NS_CC;
 
 cocos2d::Scene* Help::createScene()

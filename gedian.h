@@ -16,7 +16,7 @@ public:
 	GridPoint operator -(const GridPoint &gp)const;
 };
 typedef GridPoint GridVec;
-typedef std::vector<GridPoint>  GridPath;
+typedef std::vector<GridPoint> GridPath;
 
 
 class GridMap : public cocos2d::Node
@@ -36,8 +36,6 @@ private:
 
 	int map_width, map_height;
 };
-
-
 
 
 

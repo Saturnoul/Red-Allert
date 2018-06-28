@@ -46,6 +46,7 @@ void TcpConnection::write_data(std::string s)
 	msg.encodeHeader();
 	asio::write(socket_,
 		asio::buffer(msg.data(), msg.length()));
+	
 }
 
 std::string TcpConnection::read_data()
@@ -188,7 +189,7 @@ void SocketServer::button_start()
 	using namespace std; // For sprintf and memcpy.
 	char total[4 + 1] = "";
 	sprintf(total, "%4d", static_cast<int>(connections_.size()));
-
+	log("%d ", connections_.size());
 	for (auto i = 0; i < connections_.size(); i++)
 		connections_[i]->write_data("PLAYER" + std::string(total) + std::to_string(i + 1));
 	connection_num_ = connections_.size();
@@ -231,8 +232,14 @@ void SocketServer::loop_process()
 				error_flag_ |= r->error();
 			ret.push_back(r->read_data());
 		}
-		auto game_msg = GameMessageWrap::combine_message(ret);
 
+
+		auto game_msg = GameMessageWrap::combine_message(ret);
+		
+		GameMessageSet m;
+		m.ParseFromString(game_msg);
+		GameMessage s = m.game_message(0);
+		
 		for (auto r : connections_)
 			r->write_data(game_msg);
 	}

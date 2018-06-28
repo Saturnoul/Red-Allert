@@ -4,6 +4,8 @@
 #include"cocos2d.h"
 #include<vector>
 #include"BuildingAndsodier.h"
+#include"GameMessage.pb.h"
+#include"SocketClient.h"
 USING_NS_CC;
 class Manager : public cocos2d::Node
 {
@@ -40,6 +42,7 @@ public:
 	//Êý¾Ý
 	cocos2d::Map<int, Basement*> id_unit;
 	SocketClient* socket_client = nullptr;
+	int playerid;
 
 
 private:

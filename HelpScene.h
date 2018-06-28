@@ -1,3 +1,5 @@
+﻿#pragma once
+#pragma once
 //
 //  HelpScene.h
 //  MyGame
@@ -13,17 +15,17 @@
 class Help : public cocos2d::Layer
 {
 public:
-    static cocos2d::Scene* createScene();
-    
-    virtual bool init();
-    
-    void menuBackCallback(cocos2d::Ref* pSender);
-   // void scheduleMove(float f);
-    
-    // implement the "static create()" method manually
-    CREATE_FUNC(Help);
+	static cocos2d::Scene* createScene();
+
+	virtual bool init();
+
+	void menuBackCallback(cocos2d::Ref* pSender);
+	// void scheduleMove(float f);
+
+	// implement the "static create()" method manually
+	CREATE_FUNC(Help);
 private:
-    cocos2d::Label *label;
+	cocos2d::Label *label;
 };
 
 #endif /* HelpScene_h */

@@ -1,4 +1,4 @@
-//
+﻿//
 //  StartmenuScene.cpp
 //  MyGame
 //
@@ -105,7 +105,6 @@ bool ServerMenu::init()
     inputbox->setFontName("fonts/arial.TTF");
     inputbox->setFontSize(20);
     inputbox->setText("8008");
-    //    inputbox->setPlaceHolder("8008");
     inputbox->setInputMode(ui::EditBox::InputMode::NUMERIC);
     inputbox->setDelegate(this);
     
@@ -143,50 +142,49 @@ bool ServerMenu::init()
 
 void ServerMenu::menuStartServerCallback(cocos2d::Ref* pSender)
 {
-    /*
+
     if (!socket_server_)
     {
         socket_server_ = SocketServer::create();
-        socket_client_ = SocketClient::create();
+        socket_client_ = SocketClient::create("192.168.0.11",8008);
         log("create server and client on 8008");
-        schedule(schedule_selector(ServerMenu::connectionSchdeule), 0.1);//刷新显示连接数量
-    }*/
+        schedule(schedule_selector(ServerMenu::connectionSchdeule), 0.1);//鍒锋柊鏄剧ず杩炴帴鏁伴噺
+    }
     log("create server and client on 8008");
     
 }
 
 void ServerMenu::menuStartGameCallback(cocos2d::Ref* pSender)
 {
-    /*
+    
     if (socket_server_)
     {
 
         socket_server_ -> button_start();
-        auto scene = HelloWorld::createScene();
-        //*******auto scene = HelloWorld::createScene(socket_client_, socket_server_);
-        Director::getInstance() -> replaceScene(TransitionSplitCols::create(0.5, scene));
+		auto scene =HelloWorld::createScene(socket_server_,socket_client_);
+        Director::getInstance() -> replaceScene( scene);
         log("start game");
     }
-     */
+     
       log("start game");
 }
 
 void ServerMenu::menuBackCallback(cocos2d::Ref* pSender)
 {
-   /* if (socket_server_)
+    if (socket_server_)
     {
         unscheduleAllCallbacks();
         socket_client_ -> close();
         delete socket_client_;
         socket_client_ = nullptr;
-        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+       // std::this_thread::sleep_for(std::chrono::milliseconds(200));
         socket_server_ -> close();
         delete socket_server_;
         socket_server_  = nullptr;
     }
-    */
+    
     auto scene = StartMenu::createScene();
-    Director::getInstance() -> replaceScene(TransitionSplitCols::create(0.5, scene));
+    Director::getInstance() -> replaceScene(scene);
 }
 
 void ServerMenu::editBoxReturn(cocos2d::ui::EditBox* editBox)
@@ -198,11 +196,11 @@ void ServerMenu::editBoxReturn(cocos2d::ui::EditBox* editBox)
 
 void ServerMenu::connectionSchdeule(float f)
 {
-    /*if (socket_server_ -> connection_num())
+    if (socket_server_ -> connection_num())
         connection_msg_ -> setString("Total connection num: " + std::to_string(socket_server_ -> connection_num()));
     else
         connection_msg_ -> setString("Port already used, please change another one");
-     */
+     
     log("connection");
 }
 
@@ -283,7 +281,7 @@ bool ClientMenu::init()
 
 void ClientMenu::menuStartGameCallback(cocos2d::Ref* pSender)
 {
-   /* if (!socket_client_)
+    if (!socket_client_)
     {
         auto ip_box = static_cast<ui::EditBox*>(getChildByTag(1));
         std::string ip = ip_box -> getText();
@@ -294,19 +292,19 @@ void ClientMenu::menuStartGameCallback(cocos2d::Ref* pSender)
         schedule(schedule_selector(ClientMenu::startSchedule), 0.1);
 
     }
-    */
+    
     log("star game");
 }
 
 void ClientMenu::menuBackCallback(cocos2d::Ref* pSender)
 {
-    /*if (socket_client_)
+    if (socket_client_)
     {
         unscheduleAllSelectors();
         socket_client_->close();
         delete socket_client_;
         socket_client_ = nullptr;
-    }*/
+    }
     auto scene = StartMenu::createScene();
     Director::getInstance()->replaceScene(TransitionSplitCols::create(0.5, scene));
     
@@ -314,7 +312,7 @@ void ClientMenu::menuBackCallback(cocos2d::Ref* pSender)
 
 void ClientMenu::startSchedule(float f)
 {
-   /* if (socket_client_ -> error())
+    if (socket_client_ -> error())
     {
         unscheduleAllCallbacks();
         socket_client_->close();
@@ -333,7 +331,7 @@ void ClientMenu::startSchedule(float f)
     }
     if (socket_client_ -> started())
         wait_start();
-    */
+    
     log("start schedule");
 }
  
@@ -342,8 +340,8 @@ void ClientMenu::startSchedule(float f)
     unscheduleAllCallbacks();
     log("get the camp");
     log("start game");
-   // auto scene = HelloWorld::createScene();
-    //**********auto scene = HelloWorld::createScene(socket_client_, nullptr);
-   // Director::getInstance()->replaceScene(TransitionSplitCols::create(0.5, scene));
+
+	auto scene = HelloWorld::createScene(nullptr,socket_client_);
+    Director::getInstance()->replaceScene(scene);
 }
 

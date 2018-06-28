@@ -1,7 +1,7 @@
 #include"pathFinding.h"
 
 
-bool isInChosedPositions(vector<Vec2>& chosedPs, Vec2& possibleP)
+bool isInChosedPositions(vector<GridPoint>& chosedPs, GridPoint& possibleP)
 {
 	for (int i = 0; i < chosedPs.size(); i++)
 	{
@@ -33,7 +33,7 @@ int FindShortest(vector<int>& possibleCosts)
 	return -1;
 }
 
-int getLength(Vec2& point1, Vec2& point2)
+int getLength(GridPoint& point1, GridPoint& point2)
 {
 	int delta_x = point1.x - point2.x;
 	int delta_y = point1.y - point2.y;
@@ -43,7 +43,7 @@ int getLength(Vec2& point1, Vec2& point2)
 	return Length;
 }
 
-bool isAbandoned(Vec2& P, vector<Vec2>& abandonedPs)
+bool isAbandoned(GridPoint& P, vector<GridPoint>& abandonedPs)
 {
 	for (auto i : abandonedPs)
 	{
@@ -53,21 +53,21 @@ bool isAbandoned(Vec2& P, vector<Vec2>& abandonedPs)
 	return false;
 }
 
-Vec2 isThrough(int delta_x, int delta_y, int order)
+GridPoint isThrough(int delta_x, int delta_y, int order)
 {
 	if (delta_x == 0)
-		return Vec2(0, delta_y);
+		return GridPoint(0, delta_y);
 	else if (delta_y == 0)
-		return Vec2(delta_x, 0);
+		return GridPoint(delta_x, 0);
 	else
 	{                                                                  //得到直行时可能经过瓦片的上下限
 		int start = ((order - 1) * delta_y) / delta_x;
 		int end = (order * delta_y) / delta_x;
-		return Vec2(start, end);
+		return GridPoint(start, end);
 	}
 }
 
-bool isWalkable(Vec2& P1, Vec2& P2, const GridMap *gamemap)
+bool isWalkable(GridPoint& P1, GridPoint& P2, const GridMap *gamemap)
 {
 	
 	int delta_x = -1;
@@ -80,7 +80,7 @@ bool isWalkable(Vec2& P1, Vec2& P2, const GridMap *gamemap)
 		delta_y = 1;
 	for (int i = 0; i <= abs(x_diff); i++)
 	{                                                                          //判断两个位置能否直行
-		Vec2 s_n = isThrough(abs(x_diff) + 1, abs(y_diff) + 1, i + 1);
+		GridPoint s_n = isThrough(abs(x_diff) + 1, abs(y_diff) + 1, i + 1);
 		for (int j = s_n.x; j <= s_n.y && j <= abs(y_diff); j++)
 		{
 			if (!gamemap->gmap[int(P1.x + i * delta_x)][int(P1.y + j * delta_y)] && !(i == 0 && j == 0))
@@ -93,18 +93,18 @@ bool isWalkable(Vec2& P1, Vec2& P2, const GridMap *gamemap)
 }
 
 //生成最优的路径
-vector<Vec2> searchPathForTile(const GridMap*gamemap, Vec2& startPosition, Vec2& endPosition)
+vector<GridPoint> searchPathForTile(const GridMap*gamemap, GridPoint& startPosition, GridPoint& endPosition)
 {
 	int index = -1;
-	vector<Vec2> possiblePositions;
+	vector<GridPoint> possiblePositions;
 	vector<int> possibleCostsA;
 	vector<int> possibleCosts;
 	vector<int> chosedCosts;
 	vector<int> chosedCostsA;
-	vector<Vec2>abandonedPositions;
-	vector<Vec2> chosedPositions;
-	vector<Vec2> finalPositions;
-	Vec2 possiblePosition;
+	vector<GridPoint>abandonedPositions;
+	vector<GridPoint> chosedPositions;
+	vector<GridPoint> finalPositions;
+	GridPoint possiblePosition;
 	chosedPositions.push_back(startPosition);
 	chosedCostsA.push_back(0);
 	finalPositions.push_back(startPosition);
@@ -166,7 +166,7 @@ vector<Vec2> searchPathForTile(const GridMap*gamemap, Vec2& startPosition, Vec2&
 		if (possibleCosts.size() != 0)
 			possibleCosts.clear();
 	} while (chosedPositions[chosedPositions.size() - 1].x != endPosition.x || chosedPositions[chosedPositions.size() - 1].y != endPosition.y);
-	Vec2 temp = chosedPositions[0];
+	GridPoint temp = chosedPositions[0];
 	for (int i = 1; i < chosedPositions.size(); i++)
 	{
 		if (!isWalkable(temp, chosedPositions[i],gamemap))

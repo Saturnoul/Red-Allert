@@ -180,7 +180,7 @@ class GameMessage : public ::google::protobuf::MessageLite /* @@protoc_insertion
 
   // accessors -------------------------------------------------------
 
-	void genGameMessage(CmdCode _cmd_code, int _unit_0, int _unit_1, int _damage, int _camp, int _unit_type, const GridPath& _grid_path);
+	void genGameMessage(CmdCode _cmd_code, int _unit_0,int _camp, int _unit_type, const GridPath& _grid_path);
 
   // .MsgGridPath grid_path = 5;
   bool has_grid_path() const;

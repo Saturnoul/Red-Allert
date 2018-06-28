@@ -59,7 +59,7 @@ class WarMachine_Factory : public Basement
 {
 public:
 	static WarMachine_Factory* create();
-	virtual void handleBulletCollidingWithEnemy( float attack);
+	virtual void handleBulletCollidingWithEnemy(float attack);
 	static float WarMachineFactoryBT;
 };
 
@@ -69,7 +69,7 @@ class PatrolDog : public Basement
 public:
 	static PatrolDog* create();
 	virtual void update(float dt);
-	virtual void handleBulletCollidingWithEnemy( float attack);
+	virtual void handleBulletCollidingWithEnemy(float attack);
 	void setenemy(Sodier* _enemy) { enemy = _enemy; }
 	static float PatrolDogBT;
 private:

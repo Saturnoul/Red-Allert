@@ -14,13 +14,14 @@ class SocketClient
 {
 public:
 
-	static SocketClient* create(std::string ip = "127.0.0.1", int port = 8008);
+	static SocketClient* create(std::string ip = "192.168.0.11", int port = 8008);
 	void close();
 
 	void start()
 	{
 		start_connect();
 	};
+	int camp_, total_;
 	[[deprecated("just for test")]]
 	std::vector<GameMessage>  get_game_messages();
 
@@ -71,7 +72,7 @@ private:
 	bool start_flag_{ false }, error_flag_{ false };
 
 	std::thread *thread_, *read_thread_;
-	int camp_, total_;
+	
 
 	std::condition_variable data_cond_;
 	std::mutex mut;

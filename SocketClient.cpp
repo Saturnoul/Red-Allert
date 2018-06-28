@@ -2,7 +2,7 @@
 
 SocketClient * SocketClient::create(std::string ip, int port)
 {
-	auto s = new SocketClient(ip, port);
+	auto s = new SocketClient(ip,port);
 	s->thread_ = new std::thread(
 		std::bind(static_cast<std::size_t(asio::io_service::*)()>(&asio::io_service::run),
 			&s->io_service_));
@@ -84,7 +84,7 @@ void SocketClient::write_data(std::string s)
 	}
 	else
 	msg.body_length(s.size());
-	memcpy(msg.body(), &s, msg.body_length());
+	memcpy(msg.body(), &s[0u], msg.body_length());
 	msg.encodeHeader();
 	asio::write(socket_,asio::buffer(msg.data(), msg.length()));//同步写入
 }
@@ -107,7 +107,7 @@ void SocketClient::handle_connect(const boost::system::error_code & error)
 			char write[30] = { 0 };
 			std::cin >> write;
 			boost::system::error_code error;
-			size_t length2 = socket_.write_some(asio::buffer(data, 30), error);
+			
 			size_t length = socket_.read_some(asio::buffer(data, 30), error);
 			std::cout << "huohuo" << std::endl;
 			if (error || length < 10)
@@ -116,10 +116,11 @@ void SocketClient::handle_connect(const boost::system::error_code & error)
 			strncat(header, data+10, 4);//这是在编辑header，但是这个data+10真的无法理解
 			total_ = atoi(header);//嚯嚯嚯，这是下
 			camp_ = atoi(data + 14);//获取阵营参数
-		
+			log("%d %d ", total_, camp_);
+			log("%s",data);
 			start_flag_ = true;
 			asio::async_read(socket_, asio::buffer(read_msg_.data(), SocketMessage::header_length), std::bind(&SocketClient::handle_read_header, this, std::placeholders::_1));
-
+			
 		}
 		else
 		{

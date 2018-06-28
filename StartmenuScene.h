@@ -1,4 +1,4 @@
-//
+﻿//
 //  StartmenuScene.h
 //  MyGame
 //
@@ -9,10 +9,11 @@
 #define StartmenuScene_h
 #include "cocos2d.h"
 #include "StartScene.h"
-//#include "SocketServer.h"
-//#include "SocketClient.h"
+#include "SocketServer.h"
+#include "SocketClient.h"
 #include "ui/UIEditBox/UIEditBox.h"
-#include "HelloWorldScene.h"
+#include "BattleScene.h"
+#include"HelpScene.h"
 class StartMenu : public cocos2d::Layer
 {
 public:

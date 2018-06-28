@@ -10,8 +10,8 @@ float time(Vec2 P1, Vec2 P2, int label)
 	if (label == TypePatrolDog)
 		return distance / 60;
 }
- Basement::Basement()
- {
+Basement::Basement()
+{
 	SetVisible(false);
 	BloodProgress->setType(kCCProgressTimerTypeBar);
 	BloodProgress->setMidpoint(ccp(0, 0));
@@ -36,18 +36,18 @@ bool Basement::minusBloodAmount(float attack)
 		return true;
 	}
 }
-void Basement::setPath(GridPath _path)
+void Basement::setPath(const MsgGridPath& _msg_grid_path)
 {
 	path.clear();
-	for (auto i : _path)
-	{
-		path.push_back(i);
-	}
+	int grid_point_size = _msg_grid_path.grid_point_size();
+	path = GridPath(grid_point_size);
+	for (int i = 0; i < grid_point_size; i++)
+		path[i] = GridPoint{ _msg_grid_path.grid_point(i).x(), _msg_grid_path.grid_point(i).y() };
 }
 void Basement::generateGLPath()
 {
 	Vec2 contentSize = this->getContentSize();
-	float area = path[path.size()- 1].x * contentSize.x * contentSize.y * 1.0;
+	float area = path[path.size() - 1].x * contentSize.x * contentSize.y * 1.0;
 	float equalEdge = sqrt(area) / 5;
 	srand((unsigned)time(NULL));
 	Vec2 position = tilemap->getPositionAtMap(Vec2(path[path.size() - 2].x, path[path.size() - 2].y));
@@ -61,6 +61,11 @@ void Basement::generateGLPath()
 	} while (TilePosition.x < tilemap->getMapSize().height && TilePosition.y < tilemap->getMapSize().width && TilePosition.x >= 0 && TilePosition.y >= 0 && !gridmap->gmap[int(TilePosition.x)][int(TilePosition.y)]);
 	tilemap->getPositionAtGL(path, GLpath);
 	GLpath.push_back(Position);
+}
+
+GridPath Basement::getpath()
+{
+	return this->path;
 }
 void Basement::move()
 {

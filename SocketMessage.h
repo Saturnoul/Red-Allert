@@ -27,7 +27,7 @@ public:
 	}
 	 char*body()
 	{
-		return m_data + m_body_length;
+		return m_data + header_length;
 	}
 	size_t body_length()
 	{
@@ -43,7 +43,7 @@ public:
 	{
 		char header[header_length + 1] = "";
 		std::strncat(header, m_data, header_length);
-		m_body_length = atoi(header)- header_length;
+		m_body_length = atoi(header);
 		if (m_body_length > max_body_length)
 		{
 			m_body_length = 0;
