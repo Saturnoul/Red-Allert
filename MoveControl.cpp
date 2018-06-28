@@ -51,13 +51,13 @@ void drawRec(Vec2 position, Layer* layer)
 }
 
 //select all the sprites in the rectangle
-void selectInRec(Vec2 position, MyMap* gamemap)
+void selectInRec(int Id,Vec2 position, MyMap* gamemap)
 {
 	if (isMoved && !isOperating)
 	{
 		for (auto i : allSprites)
 		{
-			if (isInRange(gamemap->convertToWorldSpace(i->getPosition()), startPoint, position))
+			if (i->camp==Id&&isInRange(gamemap->convertToWorldSpace(i->getPosition()), startPoint, position))
 			{
 				selectedSprites.pushBack(i);
 				i->SetVisible(true);
@@ -69,12 +69,12 @@ void selectInRec(Vec2 position, MyMap* gamemap)
 }
 
 //selected the sprite being clicked
-void singleSelect(Vec2 position,MyMap* gamemap)
+void singleSelect(int Id,Vec2 position, MyMap* gamemap)
 {
 	isDown = true;
 	for (auto i : allSprites)
 	{
-		if (isInRange(gamemap->convertToNodeSpace(position), i->getPosition() - i->getContentSize() / 2, i->getPosition() + i->getContentSize() / 2) && !isOperating)
+		if (i->camp==Id&&isInRange(gamemap->convertToNodeSpace(position), i->getPosition() - i->getContentSize() / 2, i->getPosition() + i->getContentSize() / 2) && !isOperating)
 		{
 			SimpleAudioEngine::getInstance()->playEffect("selecttarget.wav");
 			selectedSprites.pushBack(i);
@@ -87,7 +87,7 @@ void singleSelect(Vec2 position,MyMap* gamemap)
 }
 
 //move the sprites being selected with the path generated
-void Move(Vec2 position, MyMap* _tileMap, GridMap* gridmap)
+void setMove(Vec2 position, MyMap* _tileMap, GridMap* gridmap)
 {
 	//Vec2 cusorTilePosition = tileCoordFromPosition(position, _tileMap);
 	Vec2 cusorTilePosition = _tileMap->staggeredCoordForPosition(position);

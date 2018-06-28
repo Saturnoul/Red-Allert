@@ -1,17 +1,18 @@
-ï»¿#ifndef __HELLOWORLD_SCENE_H__
+#ifndef __HELLOWORLD_SCENE_H__
 #define __HELLOWORLD_SCENE_H__
 #include "cocos2d.h"
 #include"Map.h"
 #include"gedian.h"
 #include "MoveControl.h"
-#include"BuildAndProduce.h"
+#include"gamemanager.h"
 #include"MyMenu.h"
-#include"SocketServer.h"
-#include"SocketClient.h"
+#include "SocketServer.h"
+#include "SocketClient.h"
 USING_NS_CC;
-extern Vector<Basement*>selectedSprites;
 
 class Manager;
+
+
 
 class Money : public cocos2d::LabelBMFont
 {
@@ -42,9 +43,9 @@ public:
 private:
 	int money = 0;
 	int timer = 0;
-	//é‡‘é’±å¢åŠ å‘¨æœŸ
+	//½ğÇ®Ôö¼ÓÖÜÆÚ
 	int inc_prd = 20;
-	//é‡‘é’±æ¯å‘¨æœŸå¢åŠ æ•°é¢
+	//½ğÇ®Ã¿ÖÜÆÚÔö¼ÓÊı¶î
 	int inc_amt = 20;
 	
 };
@@ -93,7 +94,18 @@ public:
 	MenuItemImage* dog;
 	MenuItemImage* tank;
 	CREATE_FUNC(HelloWorld);
+
+	int cur_ID = 1;
+	int player_ID = 2;
+	int num_player = 4;
+
+	SocketServer* socket_server = nullptr;
+	SocketClient* socket_client = nullptr;
+
+	GameMessageSet msg_set;
 };
+
+
 class CLientSceneTest : public cocos2d::Layer
 {
 public:
@@ -108,7 +120,7 @@ public:
 	//void update(float dt)override;
 	// implement the "static create()" method manually
 	CREATE_FUNC(CLientSceneTest);
-	
+
 private:
 	SocketClient * socket_client = nullptr;
 	int timer;
@@ -132,7 +144,6 @@ private:
 	SocketClient* socket_client = nullptr;
 	int timer;
 };
-
 
 
 

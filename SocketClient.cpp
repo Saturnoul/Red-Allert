@@ -102,6 +102,7 @@ void SocketClient::handle_connect(const boost::system::error_code & error)
 		{
 
 			std::cout << "connected\n";
+			log("conected already");
 			char data[30] = { 0 };
 			char write[30] = { 0 };
 			std::cin >> write;

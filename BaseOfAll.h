@@ -22,6 +22,7 @@ typedef enum
 	TypeTank,
 	TypeBullet
 }Types;
+
 class Basement : public Sprite
 {
 	CC_SYNTHESIZE(float, attackRate, AttackRate);          //受攻击的折合率

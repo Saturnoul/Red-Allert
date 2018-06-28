@@ -1,5 +1,7 @@
 #include "Bullet.h"
 USING_NS_CC;
+
+
 Bullet* Bullet::createWithSpriteFrameName(const char* filename)
 {
 	Bullet* bullet = new Bullet();

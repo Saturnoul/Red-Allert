@@ -1,5 +1,6 @@
 #include "BaseOfAll.h"
 
+
  Basement::Basement()
  {
 	SetVisible(false);
@@ -59,3 +60,5 @@ void Basement::resetgmap()
 		}
 	}
 }
+
+

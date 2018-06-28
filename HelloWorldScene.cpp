@@ -1,8 +1,8 @@
-ï»¿#include "HelloWorldScene.h"
+#include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
 
 USING_NS_CC;
-
+extern Vector<Basement*>selectedSprites;
 Vec2 ppos;
 Scene* HelloWorld::createScene()
 {
@@ -18,7 +18,7 @@ void HelloWorld::onEnter()
 	Scene::onEnter();
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 
-	//æ³¨å†Œ æ¥è§¦äº‹ä»¶ç›‘å¬å™¨
+	//×¢²á ½Ó´¥ÊÂ¼ş¼àÌıÆ÷
 	contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = [this](PhysicsContact& contact)
 	{
@@ -28,10 +28,10 @@ void HelloWorld::onEnter()
 
 		if (spriteA && spriteB && isEnemy((Basement*)spriteA) && spriteB->getTag() == TypeBullet && (Node*)(spriteB->getParent()) != spriteA)
 		{
-			//ä¸å¯è§çš„ç‚®å¼¹ä¸å‘ç”Ÿæ¥è§¦
+			//²»¿É¼ûµÄÅÚµ¯²»·¢Éú½Ó´¥
 			if (!spriteB->isVisible())
 				return false;
-			//ä½¿å¾—ç‚®å¼¹æ¶ˆå¤±
+			//Ê¹µÃÅÚµ¯ÏûÊ§
 			spriteB->setVisible(false);
 			enemy2 = spriteA;
 			((Basement*)spriteA)->handleBulletCollidingWithEnemy(((Bullet*)spriteB)->getAttack());
@@ -39,10 +39,10 @@ void HelloWorld::onEnter()
 		}
 		if (spriteA && spriteB && spriteA->getTag() == TypeBullet && isEnemy((Basement*)spriteB) && (Node*)(spriteA->getParent()) != spriteB)
 		{
-			//ä¸å¯è§çš„ç‚®å¼¹ä¸å‘ç”Ÿæ¥è§¦
+			//²»¿É¼ûµÄÅÚµ¯²»·¢Éú½Ó´¥
 			if (!spriteA->isVisible())
 				return false;
-			//ä½¿å¾—ç‚®å¼¹æ¶ˆå¤±
+			//Ê¹µÃÅÚµ¯ÏûÊ§
 			spriteA->setVisible(false);
 			enemy2 = spriteB;
 			((Basement*)spriteB)->handleBulletCollidingWithEnemy(((Bullet*)spriteA)->getAttack());
@@ -83,13 +83,19 @@ bool HelloWorld::init()
 	gridmap = GridMap::create(gamemap);
 	this->addChild(gridmap);
 
-	//åˆ›å»ºå»ºé€ ç®¡ç†
+	//´´½¨½¨Ôì¹ÜÀí
 	manager = Manager::create();
 	manager->settilemap(gamemap);
 	manager->setgridmap(gridmap);
+	manager->setmesssageset(&msg_set);
 	this->addChild(manager);
 
-	//åŠ è½½èµ„æº
+
+	
+
+	
+
+	//¼ÓÔØ×ÊÔ´
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("roles/game.plist", "roles/game.png");
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("roles/buildings.plist", "roles/buildings.png");
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("roles/bullet.plist", "roles/bullet.png");
@@ -129,7 +135,7 @@ bool HelloWorld::init()
 
 		}
 	};
-	//é‡‘é’±
+	//½ğÇ®
 	auto *money_icon = Sprite::create("Picture/ui/gold.png");
 	this->addChild(money_icon, 1, 100);
 	money_icon->setPosition(visibleSize.width - 130, 500);
@@ -139,7 +145,7 @@ bool HelloWorld::init()
 	this->addChild(money, 1, 101);
 	money->setPosition(visibleSize.width - 80, 500);
 	money->schedule(schedule_selector(Money::update));
-	//å±å¹•æ»šåŠ¨
+	//ÆÁÄ»¹ö¶¯
 	this->scheduleUpdate();
 
 	building = EventListenerMouse::create();
@@ -160,7 +166,8 @@ bool HelloWorld::init()
 							gamemap->setcolor(Vec2(i, j), 4);
 						}
 					}
-				manager->additem(111, buildingitem, pos, manager->gettime(buildingitem));
+				msg_set.add_game_message()->genGameMessage(GameMessage::CmdCode::GameMessage_CmdCode_CRT,cur_ID, 0, 0, 1, buildingitem, GridPath(5, GridPoint(pos.x,pos.y)));
+				cur_ID += num_player;
 				checkmap = false;
 				buildingitem = 0;
 				ppos = Vec2(-1, -1);
@@ -231,12 +238,15 @@ bool HelloWorld::init()
 	};
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(building, this);
 
+
+
+
 	MouseSelect = EventListenerMouse::create();
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(MouseSelect, this);
 	MouseSelect->onMouseDown = [&](EventMouse*event)
 	{
 
-		singleSelect(MouseLocation,gamemap);
+		singleSelect(player_ID,MouseLocation,gamemap);
 	};
 	MouseSelect->onMouseMove = [&](EventMouse* event)
 	{
@@ -247,13 +257,17 @@ bool HelloWorld::init()
 	MouseSelect->onMouseUp = [&](EventMouse* event)
 	{
 		isCancelSelection(MouseLocation, event->getMouseButton());
-		selectInRec(MouseLocation,gamemap);
+		selectInRec(player_ID,MouseLocation,gamemap);
 		if (!checkmap)
 		{
-			Move(MouseLocation, gamemap, gridmap);
+			setMove(MouseLocation, gamemap, gridmap);
 		}
 		setDefault(layer1);
+
 	};
+
+
+
 
 	return true;
 }
@@ -352,6 +366,10 @@ void  HelloWorld::createTank(cocos2d::Ref* pSender)
 }
 void HelloWorld::update(float dt)
 {
+	msg_set.add_game_message()->genGameMessage(GameMessage::CmdCode::GameMessage_CmdCode_EMP, 0, 0, 0, 0, 0, {});
+	
+	manager->updatestates();
+
 	screen_move(MouseLocation);
 	if (!checkmap)
 	{
@@ -721,7 +739,7 @@ bool Money::checkMoney(int cost) const
 }
 
 
-//å»ºç«‹èœå•
+//½¨Á¢²Ëµ¥
 
 Menu* HelloWorld::createmenu()
 {
@@ -740,6 +758,7 @@ Menu* HelloWorld::createmenu()
 	ret->setPosition(visiblesize.width - Bar->getContentSize().width/2-15, visiblesize.height - Bar->getContentSize().height * 2);
 	return ret;
 }
+
 Scene*  CLientSceneTest::createScene()
 {
 	// 'scene' is an autorelease object
@@ -759,7 +778,7 @@ Scene*  CLientSceneTest::createScene()
 bool  CLientSceneTest::init()
 {
 	//////////////////////////////
-	// 1. åˆå§‹åŒ–çˆ¶ç±»
+	// 1. ³õÊ¼»¯¸¸Àà
 	if (!Layer::init())
 	{
 		return false;
@@ -769,7 +788,7 @@ bool  CLientSceneTest::init()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 	/////////////////////////////
-	// 2. å¢åŠ ä¸€ä¸ªèœå•é¡¹ï¼Œç‚¹å‡»å®ƒçš„æ—¶å€™é€€å‡ºç¨‹åº
+	// 2. Ôö¼ÓÒ»¸ö²Ëµ¥Ïî£¬µã»÷ËüµÄÊ±ºòÍË³ö³ÌĞò
 	auto closeItem1 = MenuItemImage::create(
 		"CloseNormal.png",
 		"CloseSelected.png",
@@ -787,9 +806,9 @@ bool  CLientSceneTest::init()
 	closeItem1->setScale(1.5f);
 	closeItem2->setScale(1.5f);
 	closeItem3->setScale(1.5f);
-	closeItem2->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y-200));
-	closeItem3->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y+200));
-	auto menu = Menu::create(closeItem1, closeItem2, closeItem3,NULL);
+	closeItem2->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y - 200));
+	closeItem3->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y + 200));
+	auto menu = Menu::create(closeItem1, closeItem2, closeItem3, NULL);
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu, 1);
 
@@ -840,22 +859,22 @@ void CLientSceneTest::startSchedule(float f)
 
 void  CLientSceneTest::menuCloseCallback1(Ref* pSender)//join game
 {
-	// åœæ­¢æ›´æ–°  
+	// Í£Ö¹¸üĞÂ  
 	log("callback1");
-	if(!socket_client)
-	std::string ip = "127.0.0.1";
-	int port = 8008;
+	if (!socket_client)
+		std::string ip = "127.0.0.1";
+	int port = 23;
 	socket_client = SocketClient::create();
 	schedule(schedule_selector(CLientSceneTest::startSchedule), 0.1);
 }
 void  CLientSceneTest::menuCloseCallback2(Ref* pSender)
 {
-	// åœæ­¢æ›´æ–°  
+	// Í£Ö¹¸üĞÂ  
 	log("callback2");
 }
 void  CLientSceneTest::menuCloseCallback3(Ref* pSender)
 {
-	// åœæ­¢æ›´æ–°  
+	// Í£Ö¹¸üĞÂ  
 	log("callback3");
 }
 Scene* ServerSceneTest::createScene()
@@ -877,7 +896,7 @@ Scene* ServerSceneTest::createScene()
 bool ServerSceneTest::init()
 {
 	//////////////////////////////
-	// 1. åˆå§‹åŒ–çˆ¶ç±»
+	// 1. ³õÊ¼»¯¸¸Àà
 	if (!Layer::init())
 	{
 		return false;
@@ -887,7 +906,7 @@ bool ServerSceneTest::init()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 	/////////////////////////////
-	// 2. å¢åŠ ä¸€ä¸ªèœå•é¡¹ï¼Œç‚¹å‡»å®ƒçš„æ—¶å€™é€€å‡ºç¨‹åº
+	// 2. Ôö¼ÓÒ»¸ö²Ëµ¥Ïî£¬µã»÷ËüµÄÊ±ºòÍË³ö³ÌĞò
 	auto closeItem1 = MenuItemImage::create(
 		"CloseNormal.png",
 		"CloseSelected.png",
@@ -939,7 +958,7 @@ void ServerSceneTest::startSchedule(float f)
 
 void ServerSceneTest::menuCloseCallback1(Ref* pSender)//join game
 {
-	// åœæ­¢æ›´æ–°  
+	// Í£Ö¹¸üĞÂ  
 	log("server callback1");
 	socket_server = SocketServer::create();
 	socket_client = SocketClient::create();
@@ -948,12 +967,12 @@ void ServerSceneTest::menuCloseCallback1(Ref* pSender)//join game
 }
 void ServerSceneTest::menuCloseCallback2(Ref* pSender)
 {
-	// åœæ­¢æ›´æ–°  
+	// Í£Ö¹¸üĞÂ  
 	log("callback2");
 }
 void  ServerSceneTest::menuCloseCallback3(Ref* pSender)
 {
-	// åœæ­¢æ›´æ–°  
+	// Í£Ö¹¸üĞÂ  
 
 	log("servercallback3");
 }

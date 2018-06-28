@@ -1,6 +1,7 @@
 #include "BuildingAndSodier.h"
 Vector<Basement*>allSprites;
 
+
 float Base::BaseBT = 2;
 
 Base* Base::create()

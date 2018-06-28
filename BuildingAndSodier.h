@@ -1,9 +1,9 @@
 #ifndef _BUILDING_AND_SODIER_
 #define _BUILDING_AND_SODIER_
-
 #include "BaseOfAll.h"
 #include "Bullet.h"
 #include "MoveControl.h"
+
 
 class Base : public Basement
 {

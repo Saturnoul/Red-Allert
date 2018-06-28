@@ -3,10 +3,11 @@
 #include "cocos2d.h"
 #include "BaseOfAll.h"
 #include "pathFinding.h"
-#include "cocos2d.h"
 #include<math.h>
-#include "HelloWorldScene.h"
+#include"HelloWorldScene.h"
 USING_NS_CC;
+
+
 class Bullet : public Sprite
 {
 	CC_SYNTHESIZE(Vec2, velocity, Velocity);    //×Óµ¯ËÙ¶È

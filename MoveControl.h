@@ -11,9 +11,12 @@ using namespace cocos2d;
 using namespace std;
 using namespace CocosDenshion;
 
+class Basement;
+
 extern Vector<Basement*>allSprites;
 static Vec2 startPoint;
-static Vector<Basement*>selectedSprites;                //the sprites being selected 
+
+static Vector<Basement*>selectedSprites;  //the sprites being selected 
 static vector<Vec2>positionList;               //the ending positions for every sprite
 static bool isSelecting = false;               //judge if the mouse is selecting a sprite
 static bool isDown = false;                    //judge if the mouse is clicked down
@@ -44,13 +47,13 @@ bool isInRange(Vec2 aimposition, Vec2 startposition, Vec2 endposition);
 void drawRec(Vec2 position, Layer* layer);
 
 //select all the sprites in the rectangle
-void selectInRec(Vec2 position, MyMap* gamemap);
+void selectInRec(int Id,Vec2 position, MyMap* gamemap);
 
 //selected the sprite being clicked
-void singleSelect(Vec2 position, MyMap* gamemap);
+void singleSelect(int Id,Vec2 position, MyMap* gamemap);
 
 //move the sprites being selected with the path generated
-void Move(Vec2 position, MyMap* _tileMap, GridMap* gmap);
+void setMove(Vec2 position, MyMap* _tileMap, GridMap* gmap);
 
 //set the flags to default value
 void setDefault(Layer* layer);
