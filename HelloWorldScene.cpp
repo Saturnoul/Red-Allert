@@ -1,4 +1,4 @@
-#include "HelloWorldScene.h"
+ï»¿#include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
 
 USING_NS_CC;
@@ -18,7 +18,7 @@ void HelloWorld::onEnter()
 	Scene::onEnter();
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 
-	//×¢²á ½Ó´¥ÊÂ¼ş¼àÌıÆ÷
+	//æ³¨å†Œ æ¥è§¦äº‹ä»¶ç›‘å¬å™¨
 	contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = [this](PhysicsContact& contact)
 	{
@@ -28,10 +28,10 @@ void HelloWorld::onEnter()
 
 		if (spriteA && spriteB && isEnemy((Basement*)spriteA) && spriteB->getTag() == TypeBullet && (Node*)(spriteB->getParent()) != spriteA)
 		{
-			//²»¿É¼ûµÄÅÚµ¯²»·¢Éú½Ó´¥
+			//ä¸å¯è§çš„ç‚®å¼¹ä¸å‘ç”Ÿæ¥è§¦
 			if (!spriteB->isVisible())
 				return false;
-			//Ê¹µÃÅÚµ¯ÏûÊ§
+			//ä½¿å¾—ç‚®å¼¹æ¶ˆå¤±
 			spriteB->setVisible(false);
 			enemy2 = spriteA;
 			((Basement*)spriteA)->handleBulletCollidingWithEnemy(((Bullet*)spriteB)->getAttack());
@@ -39,10 +39,10 @@ void HelloWorld::onEnter()
 		}
 		if (spriteA && spriteB && spriteA->getTag() == TypeBullet && isEnemy((Basement*)spriteB) && (Node*)(spriteA->getParent()) != spriteB)
 		{
-			//²»¿É¼ûµÄÅÚµ¯²»·¢Éú½Ó´¥
+			//ä¸å¯è§çš„ç‚®å¼¹ä¸å‘ç”Ÿæ¥è§¦
 			if (!spriteA->isVisible())
 				return false;
-			//Ê¹µÃÅÚµ¯ÏûÊ§
+			//ä½¿å¾—ç‚®å¼¹æ¶ˆå¤±
 			spriteA->setVisible(false);
 			enemy2 = spriteB;
 			((Basement*)spriteB)->handleBulletCollidingWithEnemy(((Bullet*)spriteA)->getAttack());
@@ -83,13 +83,13 @@ bool HelloWorld::init()
 	gridmap = GridMap::create(gamemap);
 	this->addChild(gridmap);
 
-	//´´½¨½¨Ôì¹ÜÀí
+	//åˆ›å»ºå»ºé€ ç®¡ç†
 	manager = Manager::create();
 	manager->settilemap(gamemap);
 	manager->setgridmap(gridmap);
 	this->addChild(manager);
 
-	//¼ÓÔØ×ÊÔ´
+	//åŠ è½½èµ„æº
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("roles/game.plist", "roles/game.png");
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("roles/buildings.plist", "roles/buildings.png");
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("roles/bullet.plist", "roles/bullet.png");
@@ -129,7 +129,7 @@ bool HelloWorld::init()
 
 		}
 	};
-	//½ğÇ®
+	//é‡‘é’±
 	auto *money_icon = Sprite::create("Picture/ui/gold.png");
 	this->addChild(money_icon, 1, 100);
 	money_icon->setPosition(visibleSize.width - 130, 500);
@@ -139,7 +139,7 @@ bool HelloWorld::init()
 	this->addChild(money, 1, 101);
 	money->setPosition(visibleSize.width - 80, 500);
 	money->schedule(schedule_selector(Money::update));
-	//ÆÁÄ»¹ö¶¯
+	//å±å¹•æ»šåŠ¨
 	this->scheduleUpdate();
 
 	building = EventListenerMouse::create();
@@ -721,7 +721,7 @@ bool Money::checkMoney(int cost) const
 }
 
 
-//½¨Á¢²Ëµ¥
+//å»ºç«‹èœå•
 
 Menu* HelloWorld::createmenu()
 {
@@ -740,7 +740,223 @@ Menu* HelloWorld::createmenu()
 	ret->setPosition(visiblesize.width - Bar->getContentSize().width/2-15, visiblesize.height - Bar->getContentSize().height * 2);
 	return ret;
 }
+Scene*  CLientSceneTest::createScene()
+{
+	// 'scene' is an autorelease object
+	auto scene = Scene::create();
 
+	// 'layer' is an autorelease object
+	auto layer = CLientSceneTest::create();
+
+	// add layer as a child to scene
+	scene->addChild(layer);
+
+	// return the scene
+	return scene;
+}
+
+// on "init" you need to initialize your instance
+bool  CLientSceneTest::init()
+{
+	//////////////////////////////
+	// 1. åˆå§‹åŒ–çˆ¶ç±»
+	if (!Layer::init())
+	{
+		return false;
+	}
+
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	/////////////////////////////
+	// 2. å¢åŠ ä¸€ä¸ªèœå•é¡¹ï¼Œç‚¹å‡»å®ƒçš„æ—¶å€™é€€å‡ºç¨‹åº
+	auto closeItem1 = MenuItemImage::create(
+		"CloseNormal.png",
+		"CloseSelected.png",
+		CC_CALLBACK_1(CLientSceneTest::menuCloseCallback1, this));
+	auto closeItem2 = MenuItemImage::create(
+		"CloseNormal.png",
+		"CloseSelected.png",
+		CC_CALLBACK_1(CLientSceneTest::menuCloseCallback2, this));
+	auto closeItem3 = MenuItemImage::create(
+		"CloseNormal.png",
+		"CloseSelected.png",
+		CC_CALLBACK_1(CLientSceneTest::menuCloseCallback3, this));
+
+	closeItem1->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
+	closeItem1->setScale(1.5f);
+	closeItem2->setScale(1.5f);
+	closeItem3->setScale(1.5f);
+	closeItem2->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y-200));
+	closeItem3->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y+200));
+	auto menu = Menu::create(closeItem1, closeItem2, closeItem3,NULL);
+	menu->setPosition(Vec2::ZERO);
+	this->addChild(menu, 1);
+
+	/////////////////////////////
+
+	// add the label as a child to this layer
+	// add "HelloWorld" splash screen"
+	auto sprite = Sprite::create("HelloWorld.png");
+
+	// position the sprite on the center of the screen
+	sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
+
+	// add the sprite as a child to this layer
+	//this->addChild(sprite, 0);
+
+	return true;
+}
+void CLientSceneTest::wait_start()
+{
+	//socket_client_->camp();
+	unscheduleAllCallbacks();
+	log("get the camp");
+	log("start game");
+}
+
+void CLientSceneTest::startSchedule(float f)
+{
+	if (socket_client->error())
+	{
+		unscheduleAllCallbacks();
+		socket_client->close();
+		delete socket_client;
+		socket_client = nullptr;
+		log("Cannot connect to the server, please try again");
+		return;
+	}
+	switch ((timer++ % 32) / 4)
+	{
+	case 0: log("Connected, wait for server"); break;
+	case 1:log("Connected, wait for server."); break;
+	case 2: log("Connected, wait for server.."); break;
+	case 3: log("Connected, wait for server..."); break;
+	default: break;
+	}
+	if (socket_client->started())
+		wait_start();
+}
+
+void  CLientSceneTest::menuCloseCallback1(Ref* pSender)//join game
+{
+	// åœæ­¢æ›´æ–°  
+	log("callback1");
+	if(!socket_client)
+	std::string ip = "127.0.0.1";
+	int port = 8008;
+	socket_client = SocketClient::create();
+	schedule(schedule_selector(CLientSceneTest::startSchedule), 0.1);
+}
+void  CLientSceneTest::menuCloseCallback2(Ref* pSender)
+{
+	// åœæ­¢æ›´æ–°  
+	log("callback2");
+}
+void  CLientSceneTest::menuCloseCallback3(Ref* pSender)
+{
+	// åœæ­¢æ›´æ–°  
+	log("callback3");
+}
+Scene* ServerSceneTest::createScene()
+{
+	// 'scene' is an autorelease object
+	auto scene = Scene::create();
+	log("create test server");
+	// 'layer' is an autorelease object
+	auto layer = ServerSceneTest::create();
+
+	// add layer as a child to scene
+	scene->addChild(layer);
+
+	// return the scene
+	return scene;
+}
+
+// on "init" you need to initialize your instance
+bool ServerSceneTest::init()
+{
+	//////////////////////////////
+	// 1. åˆå§‹åŒ–çˆ¶ç±»
+	if (!Layer::init())
+	{
+		return false;
+	}
+
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	/////////////////////////////
+	// 2. å¢åŠ ä¸€ä¸ªèœå•é¡¹ï¼Œç‚¹å‡»å®ƒçš„æ—¶å€™é€€å‡ºç¨‹åº
+	auto closeItem1 = MenuItemImage::create(
+		"CloseNormal.png",
+		"CloseSelected.png",
+		CC_CALLBACK_1(ServerSceneTest::menuCloseCallback1, this));
+	auto closeItem2 = MenuItemImage::create(
+		"CloseNormal.png",
+		"CloseSelected.png",
+		CC_CALLBACK_1(ServerSceneTest::menuCloseCallback2, this));
+	auto closeItem3 = MenuItemImage::create(
+		"CloseNormal.png",
+		"CloseSelected.png",
+		CC_CALLBACK_1(ServerSceneTest::menuCloseCallback3, this));
+
+	closeItem1->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
+	closeItem1->setScale(1.5f);
+	closeItem2->setScale(1.5f);
+	closeItem3->setScale(1.5f);
+	closeItem2->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y - 200));
+	closeItem3->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y + 200));
+	auto menu = Menu::create(closeItem1, closeItem2, closeItem3, NULL);
+	menu->setPosition(Vec2::ZERO);
+	this->addChild(menu, 1);
+
+	/////////////////////////////
+
+	// add the label as a child to this layer
+	// add "HelloWorld" splash screen"
+	auto sprite = Sprite::create("HelloWorld.png");
+
+	// position the sprite on the center of the screen
+	sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
+
+	// add the sprite as a child to this layer
+	//this->addChild(sprite, 0);
+
+	return true;
+}
+void ServerSceneTest::startSchedule(float f)
+{
+	if (socket_server->connection_num())
+	{
+		log("Total connection num: ");
+		std::string str = std::to_string(socket_server->connection_num());
+		log("%s", str);
+	}
+	else
+		log("Port already used, please change another one");
+}
+
+void ServerSceneTest::menuCloseCallback1(Ref* pSender)//join game
+{
+	// åœæ­¢æ›´æ–°  
+	log("server callback1");
+	socket_server = SocketServer::create();
+	socket_client = SocketClient::create();
+	log("create server and client on 8008");
+	schedule(schedule_selector(ServerSceneTest::startSchedule), 0.1);
+}
+void ServerSceneTest::menuCloseCallback2(Ref* pSender)
+{
+	// åœæ­¢æ›´æ–°  
+	log("callback2");
+}
+void  ServerSceneTest::menuCloseCallback3(Ref* pSender)
+{
+	// åœæ­¢æ›´æ–°  
+
+	log("servercallback3");
+}
 
 
 
