@@ -1,4 +1,4 @@
-#ifndef _BUILDING_AND_SODIER_
+ï»¿#ifndef _BUILDING_AND_SODIER_
 #define _BUILDING_AND_SODIER_
 
 #include "BaseOfAll.h"
@@ -8,9 +8,10 @@
 class Base : public Basement
 {
 public:
-	static Base* create();                  //¾²Ì¬¹¹Ôìº¯Êı
-	virtual void handleBulletCollidingWithEnemy(float attack);      //´¦Àí±»¹¥»÷ÊÂ¼ş
+	static Base* create();                  //é™æ€æ„é€ å‡½æ•°
+	virtual void handleBulletCollidingWithEnemy(float attack);      //å¤„ç†è¢«æ”»å‡»äº‹ä»¶
 	static float BaseBT;
+	
 
 };
 
@@ -19,11 +20,11 @@ class Sodier : public Basement
 {
 public:
 	static Sodier* create();
-	void updateSodier(float dt);       //ÊµÊ±¼ì²âÓĞÎŞµĞÈË²¢·¢Æğ¹¥»÷
+	void updateSodier(float dt);       //å®æ—¶æ£€æµ‹æœ‰æ— æ•Œäººå¹¶å‘èµ·æ”»å‡»
 	static float SodierBT;
 	virtual void handleBulletCollidingWithEnemy(float attack);
 private:
-	float direction; //¼ÇÂ¼µĞÈËµÄ·½Î»
+	float direction; //è®°å½•æ•Œäººçš„æ–¹ä½
 };
 
 
@@ -68,7 +69,7 @@ class PatrolDog : public Basement
 {
 public:
 	static PatrolDog* create();
-	virtual void update(float dt);
+	void updatePatrolDog(float dt);
 	virtual void handleBulletCollidingWithEnemy(float attack);
 	void setenemy(Sodier* _enemy) { enemy = _enemy; }
 	static float PatrolDogBT;

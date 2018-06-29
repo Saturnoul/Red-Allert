@@ -1,4 +1,4 @@
-#include"gamemanager.h"
+﻿#include"gamemanager.h"
 #include<vector>
 
 Manager* Manager::create()

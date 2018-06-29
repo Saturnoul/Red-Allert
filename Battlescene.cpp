@@ -1,4 +1,4 @@
-#include "Battlescene.h"
+ï»¿#include "Battlescene.h"
 #include "SimpleAudioEngine.h"
 
 USING_NS_CC;
@@ -19,13 +19,12 @@ HelloWorld* HelloWorld::createScene(SocketServer* server,SocketClient* client)
 	return nullptr;
 	return sc;
 }
-
 void HelloWorld::onEnter()
 {
 	Scene::onEnter();
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 
-	//×¢²á ½Ó´¥ÊÂ¼þ¼àÌýÆ÷
+	//æ³¨å†Œ æŽ¥è§¦äº‹ä»¶ç›‘å¬å™¨
 	contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = [this](PhysicsContact& contact)
 	{
@@ -35,10 +34,10 @@ void HelloWorld::onEnter()
 
 		if (spriteA && spriteB && isEnemy((Basement*)spriteA) && spriteB->getTag() == TypeBullet && (Node*)(spriteB->getParent()) != spriteA)
 		{
-			//²»¿É¼ûµÄÅÚµ¯²»·¢Éú½Ó´¥
+			//ä¸å¯è§çš„ç‚®å¼¹ä¸å‘ç”ŸæŽ¥è§¦
 			if (!spriteB->isVisible())
 				return false;
-			//Ê¹µÃÅÚµ¯ÏûÊ§
+			//ä½¿å¾—ç‚®å¼¹æ¶ˆå¤±
 			spriteB->setVisible(false);
 			enemy2 = spriteA;
 			((Basement*)spriteA)->handleBulletCollidingWithEnemy(((Bullet*)spriteB)->getAttack());
@@ -46,10 +45,10 @@ void HelloWorld::onEnter()
 		}
 		if (spriteA && spriteB && spriteA->getTag() == TypeBullet && isEnemy((Basement*)spriteB) && (Node*)(spriteA->getParent()) != spriteB)
 		{
-			//²»¿É¼ûµÄÅÚµ¯²»·¢Éú½Ó´¥
+			//ä¸å¯è§çš„ç‚®å¼¹ä¸å‘ç”ŸæŽ¥è§¦
 			if (!spriteA->isVisible())
 				return false;
-			//Ê¹µÃÅÚµ¯ÏûÊ§
+			//ä½¿å¾—ç‚®å¼¹æ¶ˆå¤±
 			spriteA->setVisible(false);
 			enemy2 = spriteB;
 			((Basement*)spriteB)->handleBulletCollidingWithEnemy(((Bullet*)spriteA)->getAttack());
@@ -76,10 +75,14 @@ bool HelloWorld::init(SocketServer* server, SocketClient* client)
 	}
 
 	PhysicsWorld* phyWorld = this->getPhysicsWorld();
-
-	phyWorld->setGravity(Vec2(0, 0));
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	lose_label = LabelBMFont::create("You Lose!", "fonts/NOticeFont.fnt");
+	lose_label->setPosition(Vec2(origin.x + visibleSize.width / 2,
+		origin.y + visibleSize.height - lose_label->getContentSize().height));
+	
+	phyWorld->setGravity(Vec2(0, 0));
+	
 	MouseLocation = Vec2((visibleSize.width + origin.x) / 2, (visibleSize.height + origin.y) / 2);
 	/////////////////////////////
 	layer1 = Layer::create();
@@ -100,7 +103,7 @@ bool HelloWorld::init(SocketServer* server, SocketClient* client)
 	gridmap = GridMap::create(gamemap);
 	this->addChild(gridmap);
 
-	//´´½¨½¨Ôì¹ÜÀí
+	//åˆ›å»ºå»ºé€ ç®¡ç†
 	manager = Manager::create();
 	manager->settilemap(gamemap);
 	manager->setgridmap(gridmap);
@@ -113,19 +116,21 @@ bool HelloWorld::init(SocketServer* server, SocketClient* client)
 
 	
 
-	//¼ÓÔØ×ÊÔ´
+	//åŠ è½½èµ„æº
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("roles/game.plist", "roles/game.png");
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("roles/buildings.plist", "roles/buildings.png");
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("roles/bullet.plist", "roles/bullet.png");
 
 	mymenu = createmenu();
-
+	mymenu->setPosition(Vec2(mymenu->getPosition().x, mymenu->getPosition().y - 150));
 	this->player_ID = manager->playerid;
 	this->num_player = socket_client->total();
 	auto layer2 = Layer::create();
 	this->addChild(layer2, 1, 200);
 	layer2->addChild(mymenu);
 
+	layer2->addChild(lose_label, 40);
+	lose_label->setVisible(false);
 	auto mouse = EventListenerMouse::create();
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(mouse, this);
 	mouse->onMouseDown = [&](EventMouse*event)
@@ -154,7 +159,7 @@ bool HelloWorld::init(SocketServer* server, SocketClient* client)
 
 		}
 	};
-	//½ðÇ®
+	//é‡‘é’±
 	auto *money_icon = Sprite::create("Picture/ui/gold.png");
 	this->addChild(money_icon, 1, 100);
 	money_icon->setPosition(visibleSize.width - 130, 500);
@@ -164,7 +169,7 @@ bool HelloWorld::init(SocketServer* server, SocketClient* client)
 	this->addChild(money, 1, 101);
 	money->setPosition(visibleSize.width - 80, 500);
 	money->schedule(schedule_selector(Money::update));
-	//ÆÁÄ»¹ö¶¯
+	//å±å¹•æ»šåŠ¨
 	this->scheduleUpdate();
 
 	building = EventListenerMouse::create();
@@ -290,7 +295,7 @@ bool HelloWorld::init(SocketServer* server, SocketClient* client)
 	};
 
 
-	//³õÊ¼»¯Éú³É´ó±¾Óª
+	//åˆå§‹åŒ–ç”Ÿæˆå¤§æœ¬è¥
 	switch (socket_client->camp_)
 	{
 	case 1:
@@ -321,7 +326,7 @@ bool HelloWorld::init(SocketServer* server, SocketClient* client)
 void  HelloWorld::createBarrack(cocos2d::Ref* pSender)
 {
 	cancleselected();
-	if (money->checkMoney(100))
+	if (money->checkMoney(2700))
 	{
 		MouseSelect->setEnabled(false);
 		selectedSprites.clear();
@@ -334,7 +339,7 @@ void  HelloWorld::createBarrack(cocos2d::Ref* pSender)
 void  HelloWorld::createpowerplant(cocos2d::Ref* pSender)
 {
 	cancleselected();
-	if (money->checkMoney(100))
+	if (money->checkMoney(270))
 	{
 		MouseSelect->setEnabled(false);
 		selectedSprites.clear();
@@ -347,7 +352,7 @@ void  HelloWorld::createpowerplant(cocos2d::Ref* pSender)
 void  HelloWorld::createfield(cocos2d::Ref* pSender)
 {
 	cancleselected();
-	if (money->checkMoney(100))
+	if (money->checkMoney(1797))
 	{
 		MouseSelect->setEnabled(false);
 		selectedSprites.clear();
@@ -360,7 +365,7 @@ void  HelloWorld::createfield(cocos2d::Ref* pSender)
 void  HelloWorld::createfactory(cocos2d::Ref* pSender)
 {
 	cancleselected();
-	if (money->checkMoney(100))
+	if (money->checkMoney(1797))
 	{
 		MouseSelect->setEnabled(false);
 		selectedSprites.clear();
@@ -373,7 +378,7 @@ void  HelloWorld::createfactory(cocos2d::Ref* pSender)
 void  HelloWorld::createsodier(cocos2d::Ref* pSender)
 {
 	cancleselected();
-	if (money->checkMoney(100))
+	if (money->checkMoney(270))
 	{
 		MouseSelect->setEnabled(false);
 		selectedSprites.clear();
@@ -386,7 +391,7 @@ void  HelloWorld::createsodier(cocos2d::Ref* pSender)
 void  HelloWorld::createpetroldog(cocos2d::Ref* pSender)
 {
 	cancleselected();
-	if (money->checkMoney(100))
+	if (money->checkMoney(180))
 	{
 		MouseSelect->setEnabled(false);
 		selectedSprites.clear();
@@ -399,7 +404,7 @@ void  HelloWorld::createpetroldog(cocos2d::Ref* pSender)
 void  HelloWorld::createTank(cocos2d::Ref* pSender)
 {
 	cancleselected();
-	if (money->checkMoney(100))
+	if (money->checkMoney(854))
 	{
 		MouseSelect->setEnabled(false);
 		selectedSprites.clear();
@@ -409,13 +414,54 @@ void  HelloWorld::createTank(cocos2d::Ref* pSender)
 		building->setEnabled(true);
 	}
 }
-void HelloWorld::update(float dt)
+void HelloWorld::lose()
 {
 	
-	
-	manager->updatestates();
+	if (socket_client)
+	{
+		socket_client->close();
+		delete socket_client;
+		socket_client = nullptr;
+	}
+	if (socket_server)
+	{
+		socket_server->close();
+		delete socket_server;
+		socket_server = nullptr;
+	}
+}
+void HelloWorld::onExit()
+{
+	if (socket_client)
+	{
+		socket_client->close();
+		delete socket_client;
+		socket_client = nullptr;
+	}
+	if (socket_server)
+	{
+		socket_server->close();
+		delete socket_server;
+		socket_server = nullptr;
+	}
 
+}
+void HelloWorld::update(float dt)
+{
+	manager->updatestates();
+	/*auto unit = manager->id_unit.at(player_ID);
+	if (unit->was_destroyed)
+	{
+		win_or_lose = -1;
+	}*/
 	screen_move(MouseLocation);
+	if (win_or_lose == -1)
+	{
+		/*checkmap = false;
+		MouseSelect->setEnabled(false);
+		lose_label->setVisible(true);*/
+	}
+	//else if (win_or_lose == 1)
 	if (!checkmap)
 	{
 		building->setEnabled(false);
@@ -736,37 +782,37 @@ void Money::spendMoney(int type)
 	{
 	case 1:
 	{
-		money -= 100;
+		money -= 2700;
 		break;
 	}
 	case 2:
 	{
-		money -= 100;
+		money -= 270;
 		break;
 	}
 	case 3:
 	{
-		money -= 100;
+		money -= 1797;
 		break;
 	}
 	case 4:
 	{
-		money -= 100;
+		money -= 1797;
 		break;
 	}
 	case 5:
 	{
-		money -= 100;
+		money -= 270;
 		break;
 	}
 	case 6:
 	{
-		money -= 100;
+		money -= 180;
 		break;
 	}
 	case 7:
 	{
-		money -= 100;
+		money -= 854;
 		break;
 	}
 	}
@@ -778,37 +824,37 @@ void Money::resetMoney(int type)
 	{
 	case 1:
 	{
-		money += 100;
+		money += 2700;
 		break;
 	}
 	case 2:
 	{
-		money += 100;
+		money += 270;
 		break;
 	}
 	case 3:
 	{
-		money += 100;
+		money += 1797;
 		break;
 	}
 	case 4:
 	{
-		money += 100;
+		money +=1797;
 		break;
 	}
 	case 5:
 	{
-		money += 100;
+		money += 270;
 		break;
 	}
 	case 6:
 	{
-		money += 100;
+		money += 180;
 		break;
 	}
 	case 7:
 	{
-		money += 100;
+		money += 854;
 		break;
 	}
 	}
@@ -825,12 +871,12 @@ bool Money::checkMoney(int cost) const
 }
 
 
-//½¨Á¢²Ëµ¥
+//å»ºç«‹èœå•
 
 Menu* HelloWorld::createmenu()
 {
 	auto visiblesize = Director::getInstance()->getVisibleSize();
-	Bar = MenuItemImage::create("menu/barrack-up.png", "menu/barrack-down.png", CC_CALLBACK_1(HelloWorld::createBarrack, this));
+	Bar = MenuItemImage::create("menu/up.png", "menu/down.png", CC_CALLBACK_1(HelloWorld::createBarrack, this));
 	power = MenuItemImage::create("menu/power-up.png", "menu/power-down.png", CC_CALLBACK_1(HelloWorld::createpowerplant, this));
 	field = MenuItemImage::create("menu/field-up.png", "menu/field-down.png", CC_CALLBACK_1(HelloWorld::createfield, this));
 	factory = MenuItemImage::create("menu/factory-up.png", "menu/factory-down.png", CC_CALLBACK_1(HelloWorld::createfactory, this));

@@ -1,4 +1,4 @@
-#include "HelloWorldScene.h"
+ï»¿#include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
 
 USING_NS_CC;
@@ -18,7 +18,7 @@ void HelloWorld::onEnter()
 	Scene::onEnter();
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 
-	//×¢²á ½Ó´¥ÊÂ¼ş¼àÌıÆ÷
+	//æ³¨å†Œ æ¥è§¦äº‹ä»¶ç›‘å¬å™¨
 	contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = [this](PhysicsContact& contact)
 	{
@@ -28,10 +28,10 @@ void HelloWorld::onEnter()
 
 		if (spriteA && spriteB && isEnemy((Basement*)spriteA) && spriteB->getTag() == TypeBullet && (Node*)(spriteB->getParent()) != spriteA)
 		{
-			//²»¿É¼ûµÄÅÚµ¯²»·¢Éú½Ó´¥
+			//ä¸å¯è§çš„ç‚®å¼¹ä¸å‘ç”Ÿæ¥è§¦
 			if (!spriteB->isVisible())
 				return false;
-			//Ê¹µÃÅÚµ¯ÏûÊ§
+			//ä½¿å¾—ç‚®å¼¹æ¶ˆå¤±
 			spriteB->setVisible(false);
 			enemy2 = spriteA;
 			((Basement*)spriteA)->handleBulletCollidingWithEnemy(((Bullet*)spriteB)->getAttack());
@@ -39,10 +39,10 @@ void HelloWorld::onEnter()
 		}
 		if (spriteA && spriteB && spriteA->getTag() == TypeBullet && isEnemy((Basement*)spriteB) && (Node*)(spriteA->getParent()) != spriteB)
 		{
-			//²»¿É¼ûµÄÅÚµ¯²»·¢Éú½Ó´¥
+			//ä¸å¯è§çš„ç‚®å¼¹ä¸å‘ç”Ÿæ¥è§¦
 			if (!spriteA->isVisible())
 				return false;
-			//Ê¹µÃÅÚµ¯ÏûÊ§
+			//ä½¿å¾—ç‚®å¼¹æ¶ˆå¤±
 			spriteA->setVisible(false);
 			enemy2 = spriteB;
 			((Basement*)spriteB)->handleBulletCollidingWithEnemy(((Bullet*)spriteA)->getAttack());
@@ -83,7 +83,7 @@ bool HelloWorld::init()
 	gridmap = GridMap::create(gamemap);
 	this->addChild(gridmap);
 
-	//´´½¨½¨Ôì¹ÜÀí
+	//åˆ›å»ºå»ºé€ ç®¡ç†
 	manager = Manager::create();
 	manager->settilemap(gamemap);
 	manager->setgridmap(gridmap);
@@ -95,7 +95,7 @@ bool HelloWorld::init()
 
 	
 
-	//¼ÓÔØ×ÊÔ´
+	//åŠ è½½èµ„æº
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("roles/game.plist", "roles/game.png");
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("roles/buildings.plist", "roles/buildings.png");
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("roles/bullet.plist", "roles/bullet.png");
@@ -135,7 +135,7 @@ bool HelloWorld::init()
 
 		}
 	};
-	//½ğÇ®
+	//é‡‘é’±
 	auto *money_icon = Sprite::create("Picture/ui/gold.png");
 	this->addChild(money_icon, 1, 100);
 	money_icon->setPosition(visibleSize.width - 130, 500);
@@ -145,7 +145,7 @@ bool HelloWorld::init()
 	this->addChild(money, 1, 101);
 	money->setPosition(visibleSize.width - 80, 500);
 	money->schedule(schedule_selector(Money::update));
-	//ÆÁÄ»¹ö¶¯
+	//å±å¹•æ»šåŠ¨
 	this->scheduleUpdate();
 
 	building = EventListenerMouse::create();
@@ -166,7 +166,7 @@ bool HelloWorld::init()
 							gamemap->setcolor(Vec2(i, j), 4);
 						}
 					}
-				msg_set.add_game_message()->genGameMessage(GameMessage::CmdCode::GameMessage_CmdCode_CRT,cur_ID, 0, 0, 1, buildingitem, GridPath(5, GridPoint(pos.x,pos.y)));
+				msg_set.add_game_message()->genGameMessage(GameMessage::CmdCode::GameMessage_CmdCode_CRT,cur_ID, 1, buildingitem, GridPath(5, GridPoint(pos.x,pos.y)));
 				cur_ID += num_player;
 				checkmap = false;
 				buildingitem = 0;
@@ -260,7 +260,7 @@ bool HelloWorld::init()
 		selectInRec(player_ID,MouseLocation,gamemap);
 		if (!checkmap)
 		{
-			setMove(MouseLocation, gamemap, gridmap);
+			//setMove(MouseLocation, gamemap, gridmap);
 		}
 		setDefault(layer1);
 
@@ -366,7 +366,7 @@ void  HelloWorld::createTank(cocos2d::Ref* pSender)
 }
 void HelloWorld::update(float dt)
 {
-	msg_set.add_game_message()->genGameMessage(GameMessage::CmdCode::GameMessage_CmdCode_EMP, 0, 0, 0, 0, 0, {});
+	msg_set.add_game_message()->genGameMessage(GameMessage::CmdCode::GameMessage_CmdCode_EMP, 0, 0,  0, {});
 	
 	manager->updatestates();
 
@@ -739,7 +739,7 @@ bool Money::checkMoney(int cost) const
 }
 
 
-//½¨Á¢²Ëµ¥
+//å»ºç«‹èœå•
 
 Menu* HelloWorld::createmenu()
 {
@@ -778,7 +778,7 @@ Scene*  CLientSceneTest::createScene()
 bool  CLientSceneTest::init()
 {
 	//////////////////////////////
-	// 1. ³õÊ¼»¯¸¸Àà
+	// 1. åˆå§‹åŒ–çˆ¶ç±»
 	if (!Layer::init())
 	{
 		return false;
@@ -788,7 +788,7 @@ bool  CLientSceneTest::init()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 	/////////////////////////////
-	// 2. Ôö¼ÓÒ»¸ö²Ëµ¥Ïî£¬µã»÷ËüµÄÊ±ºòÍË³ö³ÌĞò
+	// 2. å¢åŠ ä¸€ä¸ªèœå•é¡¹ï¼Œç‚¹å‡»å®ƒçš„æ—¶å€™é€€å‡ºç¨‹åº
 	auto closeItem1 = MenuItemImage::create(
 		"CloseNormal.png",
 		"CloseSelected.png",
@@ -859,7 +859,7 @@ void CLientSceneTest::startSchedule(float f)
 
 void  CLientSceneTest::menuCloseCallback1(Ref* pSender)//join game
 {
-	// Í£Ö¹¸üĞÂ  
+	// åœæ­¢æ›´æ–°  
 	log("callback1");
 	if (!socket_client)
 		std::string ip = "127.0.0.1";
@@ -869,12 +869,12 @@ void  CLientSceneTest::menuCloseCallback1(Ref* pSender)//join game
 }
 void  CLientSceneTest::menuCloseCallback2(Ref* pSender)
 {
-	// Í£Ö¹¸üĞÂ  
+	// åœæ­¢æ›´æ–°  
 	log("callback2");
 }
 void  CLientSceneTest::menuCloseCallback3(Ref* pSender)
 {
-	// Í£Ö¹¸üĞÂ  
+	// åœæ­¢æ›´æ–°  
 	log("callback3");
 }
 Scene* ServerSceneTest::createScene()
@@ -896,7 +896,7 @@ Scene* ServerSceneTest::createScene()
 bool ServerSceneTest::init()
 {
 	//////////////////////////////
-	// 1. ³õÊ¼»¯¸¸Àà
+	// 1. åˆå§‹åŒ–çˆ¶ç±»
 	if (!Layer::init())
 	{
 		return false;
@@ -906,7 +906,7 @@ bool ServerSceneTest::init()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 	/////////////////////////////
-	// 2. Ôö¼ÓÒ»¸ö²Ëµ¥Ïî£¬µã»÷ËüµÄÊ±ºòÍË³ö³ÌĞò
+	// 2. å¢åŠ ä¸€ä¸ªèœå•é¡¹ï¼Œç‚¹å‡»å®ƒçš„æ—¶å€™é€€å‡ºç¨‹åº
 	auto closeItem1 = MenuItemImage::create(
 		"CloseNormal.png",
 		"CloseSelected.png",
@@ -958,7 +958,7 @@ void ServerSceneTest::startSchedule(float f)
 
 void ServerSceneTest::menuCloseCallback1(Ref* pSender)//join game
 {
-	// Í£Ö¹¸üĞÂ  
+	// åœæ­¢æ›´æ–°  
 	log("server callback1");
 	socket_server = SocketServer::create();
 	socket_client = SocketClient::create();
@@ -967,12 +967,12 @@ void ServerSceneTest::menuCloseCallback1(Ref* pSender)//join game
 }
 void ServerSceneTest::menuCloseCallback2(Ref* pSender)
 {
-	// Í£Ö¹¸üĞÂ  
+	// åœæ­¢æ›´æ–°  
 	log("callback2");
 }
 void  ServerSceneTest::menuCloseCallback3(Ref* pSender)
 {
-	// Í£Ö¹¸üĞÂ  
+	// åœæ­¢æ›´æ–°  
 
 	log("servercallback3");
 }

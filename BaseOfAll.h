@@ -1,4 +1,4 @@
-#ifndef _BASE_OF_ALL_
+ï»¿#ifndef _BASE_OF_ALL_
 #define _BASE_OF_ALL_
 #include "cocos2d.h"
 #include<string>
@@ -22,12 +22,12 @@ typedef enum
 }Types;
 class Basement : public Sprite
 {
-	CC_SYNTHESIZE(float, attackRate, AttackRate);          //ÊÜ¹¥»÷µÄÕÛºÏÂÊ
-	CC_SYNTHESIZE(float, buildTime, BuildTime);            //½¨ÔìºÄÊ±
+	CC_SYNTHESIZE(float, attackRate, AttackRate);          //å—æ”»å‡»çš„æŠ˜åˆç‡
+	CC_SYNTHESIZE(float, buildTime, BuildTime);            //å»ºé€ è€—æ—¶
 public:
 	Basement();
-	bool minusBloodAmount(float attack);              //ÊÜµ½¹¥»÷ºó¼õÉÙÑªÁ¿
-	void SetVisible(bool judge);         //ÉèÖÃÑªÌõÊÇ·ñ¿É¼û
+	bool minusBloodAmount(float attack);              //å—åˆ°æ”»å‡»åå‡å°‘è¡€é‡
+	void SetVisible(bool judge);         //è®¾ç½®è¡€æ¡æ˜¯å¦å¯è§
 	virtual void handleBulletCollidingWithEnemy(float attack) = 0;
 	MyMap* gamemap;
 	GridMap* gridmap;
@@ -35,7 +35,7 @@ public:
 	int id;
 	int camp = 0;
 	static MyMap* tilemap;
-
+	bool was_destroyed = false;
 	void setpos(Vec2 position);
 	void setgamemap(MyMap* Gamemap);
 	void setgridmap(GridMap* Gridmap);
@@ -47,9 +47,9 @@ public:
 	void move();
 
 protected:
-	Sprite* BloodBackground = Sprite::createWithSpriteFrameName("bloodBackground.png");   //ÑªÌõ±³¾°
-	Sprite* Blood = Sprite::createWithSpriteFrameName("blood.png");               //ÑªÌõ         
-	ProgressTimer* BloodProgress = ProgressTimer::create(Blood);             //ÑªÌõ½ø¶ÈÌõ
+	Sprite* BloodBackground = Sprite::createWithSpriteFrameName("bloodBackground.png");   //è¡€æ¡èƒŒæ™¯
+	Sprite* Blood = Sprite::createWithSpriteFrameName("blood.png");               //è¡€æ¡         
+	ProgressTimer* BloodProgress = ProgressTimer::create(Blood);             //è¡€æ¡è¿›åº¦æ¡
 	GridPath path;
 	vector<Vec2> GLpath;
 };

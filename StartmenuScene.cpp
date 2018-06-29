@@ -146,7 +146,7 @@ void ServerMenu::menuStartServerCallback(cocos2d::Ref* pSender)
     if (!socket_server_)
     {
         socket_server_ = SocketServer::create();
-        socket_client_ = SocketClient::create("192.168.0.11",8008);
+        socket_client_ = SocketClient::create();
         log("create server and client on 8008");
         schedule(schedule_selector(ServerMenu::connectionSchdeule), 0.1);//鍒锋柊鏄剧ず杩炴帴鏁伴噺
     }
@@ -288,7 +288,7 @@ void ClientMenu::menuStartGameCallback(cocos2d::Ref* pSender)
         auto port_box = static_cast<ui::EditBox*>(getChildByTag(2));
         int port = atoi(port_box -> getText());
         log("ip:%s, port:%d", ip.c_str(), port);
-        socket_client_ = SocketClient::create(ip, port);
+        socket_client_ = SocketClient::create(ip.c_str(), port);
         schedule(schedule_selector(ClientMenu::startSchedule), 0.1);
 
     }

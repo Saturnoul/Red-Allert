@@ -1,4 +1,4 @@
-#ifndef __HELLOWORLD_SCENE_H__
+ï»¿#ifndef __HELLOWORLD_SCENE_H__
 #define __HELLOWORLD_SCENE_H__
 #include "cocos2d.h"
 #include"Map.h"
@@ -20,9 +20,7 @@ public:
 	void update(float f) override;
 	CREATE_FUNC(Money);
 	bool init() override;
-	/**
-	* \brief update money on screen
-	*/
+
 	void updateMoneyDisplay();
 	/**
 	* \param cost cost
@@ -43,9 +41,9 @@ public:
 private:
 	int money = 0;
 	int timer = 0;
-	//½ğÇ®Ôö¼ÓÖÜÆÚ
+	//é‡‘é’±å¢åŠ å‘¨æœŸ
 	int inc_prd = 20;
-	//½ğÇ®Ã¿ÖÜÆÚÔö¼ÓÊı¶î
+	//é‡‘é’±æ¯å‘¨æœŸå¢åŠ æ•°é¢
 	int inc_amt = 20;
 	
 };
@@ -81,7 +79,7 @@ public:
 	EventListenerMouse*MouseSelect;
 	EventListenerKeyboard* keycallback;
 	void onKeyPressed(EventKeyboard::KeyCode keycode, cocos2d::Event* pEvent);
-
+	void lose();
 	bool checkmap = true;
 	Size Mapsize;
 	int buildingitem=0;
@@ -89,7 +87,7 @@ public:
 	Money * money = nullptr;
 	EventListenerPhysicsContact *contactListener;
 	virtual void onEnter();
-
+	virtual void onExit();
 	MenuItemImage* Bar;
 	MenuItemImage* power;
 	MenuItemImage* field;
@@ -104,7 +102,10 @@ public:
 	Vec2 Base_pos;
 	SocketServer* socket_server = nullptr;
 	SocketClient* socket_client = nullptr;
-
+	LabelBMFont *lose_label = nullptr;
+	//bool win_or_lose;
+	int win_or_lose=0;
+	
 	GameMessageSet msg_set;
 };
 

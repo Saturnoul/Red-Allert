@@ -1,6 +1,6 @@
-#include "BuildingAndSodier.h"
+ï»¿#include "BuildingAndSodier.h"
 Vector<Basement*>allSprites;
-
+extern int player_ID;
 float Base::BaseBT = 2;
 
 Base* Base::create()
@@ -48,6 +48,7 @@ void Base::handleBulletCollidingWithEnemy(float attack)
 		auto parent = this->getParent();
 		this->resetgmap();
 		parent->removeChild(this);
+		was_destroyed = true;
 		selectedSprites.eraseObject(this);
 	}
 }
@@ -348,6 +349,7 @@ PatrolDog* PatrolDog::create()
 		patroldog->autorelease();
 		patroldog->setBuildTime(PatrolDogBT);
 		allSprites.pushBack((Basement*)patroldog);
+		patroldog->schedule(schedule_selector(PatrolDog::updatePatrolDog), 0.5f);
 		patroldog->setAttackRate(1);
 		return patroldog;
 	}
@@ -364,7 +366,7 @@ void PatrolDog::handleBulletCollidingWithEnemy(float attack)
 		selectedSprites.eraseObject(this);
 	}
 }
-void PatrolDog::update(float dt)
+void PatrolDog::updatePatrolDog(float dt)
 {
 	static bool isMoved = false;
 	Vec2 enemyPosition = searchEnemy(allSprites, (Basement*)this, direction);
@@ -373,11 +375,11 @@ void PatrolDog::update(float dt)
 		SimpleAudioEngine::getInstance()->playEffect("sound/dog.wav");
 		if (!isMoved)
 		{
-			this->runAction(MoveTo::create(0.5, enemyPosition));
+			this->runAction(MoveTo::create(2.5, enemyPosition));
 			isMoved = true;
 		}
 
-		if (!enemy->minusBloodAmount(50))
+		if (!enemy->minusBloodAmount(30))
 		{
 			isMoved = false;
 			allSprites.eraseObject(enemy);
@@ -446,7 +448,7 @@ void Tank::updateTank(float dt)
 bool isEnemy(Basement* basement)
 {
 	auto label = basement->getTag();
-	if (label == TypeBase || label == TypeSodier || label == TypePowerPlant || label == TypeWarmachineFactory
+	if (label == TypeBase || label == TypeSodier ||label==TypeMineField|| label == TypePowerPlant || label == TypeWarmachineFactory
 		|| label == TypeBarrack || label == TypePatrolDog || label == TypeTank)
 	{
 		return true;
@@ -500,7 +502,7 @@ float directionAngle(Vec2 delta)
 	{
 		if (delta.y >= 0)
 			return angle;
-		else                                                       //¼ÆËãµĞÈËÏà¶ÔÓÚ×Ô¼ºËùÔÚµÄ·½Î»½Ç
+		else                                                       //è®¡ç®—æ•Œäººç›¸å¯¹äºè‡ªå·±æ‰€åœ¨çš„æ–¹ä½è§’
 			return 360.0 - angle;
 	}
 	else
@@ -519,10 +521,10 @@ Vec2 searchEnemy(Vector<Basement*> sprites, Basement* self, float& direction)
 	{
 		auto P2 = i->getPosition();
 		auto distance = sqrtf((P1.x - P2.x) * (P1.x - P2.x) + (P1.y - P2.y)* (P1.y - P2.y));
-		if (distance <= 300.0 && i != self)
+		if (distance <= 300.0 && i->camp != self->camp)
 		{
 			direction = directionAngle(i->getPosition() - self->getPosition());
-			if (self->getTag() == TypePatrolDog && i->getTag() == TypeSodier)                //ËÑË÷µĞÈË
+			if (self->getTag() == TypePatrolDog && i->getTag() == TypeSodier)                //æœç´¢æ•Œäºº
 				((PatrolDog*)self)->setenemy((Sodier*)i);
 			return i->getPosition();
 		}
